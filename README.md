@@ -2,12 +2,12 @@
 
 **Table des Matières**
 
-    [Description]
-    [Caractéristiques]
-    [Installation]
-    [Instructions de Jeu]
-    [Technologies Utilisées]
-    [Licence]
+    - Description
+    - Caractéristiques
+    - Installation
+    - Instructions de Jeu
+    - Technologies Utilisées
+    - Licence
 
 **Description**
 
