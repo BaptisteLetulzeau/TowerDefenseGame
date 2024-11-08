@@ -40,7 +40,7 @@
 
 **Design Pattern**
 
-    - Factory pattern (Créer des tours (Towers) différentes en fonction de la sélection de l'utilisateur sans avoir à instancier directement les classes concrètes (comme ArrowTower))
+    - Factory pattern (créer des tours (Towers) différentes en fonction de la sélection de l'utilisateur sans avoir à instancier directement les classes concrètes (comme ArrowTower))
     - Observer pattern (notifier des éléments du jeu (comme une tour) lorsqu'un ennemi entre dans la portée de la tour (pratique pour les attaques automatiques))
     - Strategy pattern (changer la stratégie d'attaque des tours (par exemple : cibler le premier ennemi, le plus proche, ou le plus faible))
 
