@@ -5,65 +5,105 @@ import entities.towers.FlailMan;
 import entities.towers.Towers;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameScene {
 
     private final Pane gamePane;
     private final ComboBox<String> towerTypeComboBox;
     private final VBox rootLayout;
+    private final List<Rectangle> towerSpots;
 
     public GameScene() {
         gamePane = new Pane();
         towerTypeComboBox = new ComboBox<>();
+        towerSpots = new ArrayList<>();
+
         setupComboBox();
         setupBackground();
+        setupTowerSpots();
         setupMouseClickListener();
 
-        // Combiner le ComboBox et le gamePane dans un VBox
         rootLayout = new VBox(towerTypeComboBox, gamePane);
     }
 
     private void setupComboBox() {
-        // Ajouter les options de types de tours au ComboBox
         towerTypeComboBox.getItems().addAll("ArrowTower", "FlailMan");
-        towerTypeComboBox.setValue("ArrowTower"); // Option par défaut
+        towerTypeComboBox.setValue("ArrowTower");
     }
 
     private void setupBackground() {
-        // Charger et définir l'image de fond ici
+        Image backgroundImage = new Image("/assets/images/background/background.png");
+
+        ImageView backgroundImageView = new ImageView(backgroundImage);
+
+        backgroundImageView.setFitWidth(1400);
+        backgroundImageView.setFitHeight(1000);
+
+        gamePane.getChildren().addFirst(backgroundImageView);
+    }
+
+    private void setupTowerSpots() {
+        addTowerSpot(150, 240, 150, 150);
+        addTowerSpot(330, 700, 150, 150);
+        addTowerSpot(600, 220, 150, 150);
+        addTowerSpot(950, 660, 150, 150);
+        addTowerSpot(1200, 220, 150, 150);
+    }
+
+    private void addTowerSpot(double x, double y, double width, double height) {
+        Rectangle spot = new Rectangle(x - width / 2, y - height / 2, width, height);
+        spot.setFill(Color.TRANSPARENT);
+        spot.setStroke(Color.BLACK);
+        gamePane.getChildren().add(spot);
+        towerSpots.add(spot);
     }
 
     private void setupMouseClickListener() {
         gamePane.setOnMouseClicked((MouseEvent event) -> {
+            double clickX = event.getX();
+            double clickY = event.getY();
             String selectedTowerType = towerTypeComboBox.getValue();
-            addTower(gamePane, event.getX(), event.getY(), selectedTowerType);
-        });
-    }
 
-    public Pane getGamePane() {
-        return gamePane;
+            for (Rectangle spot : towerSpots) {
+                if (spot.contains(clickX, clickY)) {
+                    addTower(spot.getX() + spot.getWidth() / 2, spot.getY() + spot.getHeight() / 2, selectedTowerType);
+                    return;
+                }
+            }
+
+            System.out.println("Clic hors d'un emplacement valide");
+        });
     }
 
     public VBox getRootLayout() {
         return rootLayout;
     }
 
-    private void addTower(Pane gamePane, double x, double y, String towerType) {
+    private void addTower(double x, double y, String towerType) {
         Towers tower;
         switch (towerType) {
             case "ArrowTower":
-                tower = new ArrowTower(x, y);
+                tower = new ArrowTower(x-75, y-75);
                 break;
             case "FlailMan":
-                tower = new FlailMan(x, y);
+                tower = new FlailMan(x-75, y-75);
                 break;
             default:
                 throw new IllegalArgumentException("Type de tour inconnu : " + towerType);
         }
 
         gamePane.getChildren().add(tower);
+        System.out.println("Tour placée à : " + x + ", " + y);
     }
 }

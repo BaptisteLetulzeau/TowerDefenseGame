@@ -15,7 +15,12 @@ public abstract class Towers extends ImageView  {
     public Towers(double x, double y, String imagePath) {
         this.x = x;
         this.y = y;
+
         setImage(new Image(imagePath));
+
+        setFitWidth(150);
+        setFitHeight(150);
+
         setX(x);
         setY(y);
     }

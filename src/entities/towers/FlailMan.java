@@ -5,7 +5,7 @@ import javafx.scene.layout.Pane;
 public class FlailMan extends Towers {
 
     public FlailMan(double x, double y) {
-        super(x, y, "/assets/towers/flailMan.png");
+        super(x, y, "/assets/images/towers/tour.jpg");
     }
 
     @Override
