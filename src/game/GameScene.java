@@ -1,5 +1,6 @@
 package game;
 
+import controllers.GameController;
 import entities.towers.ArrowTower;
 import entities.towers.FlailMan;
 import entities.towers.Towers;
@@ -23,6 +24,7 @@ public class GameScene {
     private final ComboBox<String> towerTypeComboBox;
     private final VBox rootLayout;
     private final List<Rectangle> towerSpots;
+    private final GameController gameController;
 
     public GameScene() {
         gamePane = new Pane();
@@ -35,6 +37,11 @@ public class GameScene {
         setupMouseClickListener();
 
         rootLayout = new VBox(towerTypeComboBox, gamePane);
+        gameController = new GameController(rootLayout);
+    }
+
+    public VBox getRootLayout() {
+        return rootLayout;
     }
 
     private void setupComboBox() {
@@ -84,10 +91,6 @@ public class GameScene {
 
             System.out.println("Clic hors d'un emplacement valide");
         });
-    }
-
-    public VBox getRootLayout() {
-        return rootLayout;
     }
 
     private void addTower(double x, double y, String towerType) {

@@ -1,3 +1,4 @@
+import controllers.GameController;
 import game.GameScene;
 import javafx.application.Application;
 import javafx.scene.Scene;
