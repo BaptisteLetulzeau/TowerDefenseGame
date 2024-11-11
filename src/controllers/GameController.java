@@ -1,13 +1,14 @@
 package controllers;
 
 import entities.enemies.Enemies;
-import entities.enemies.MiniBear;
-import entities.enemies.Skeleton;
+import entities.enemies.Knight;
+//import entities.enemies.Skeleton;
+import entities.towers.ArrowTower;
 import game.Path;
-import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Point2D;
 
 public class GameController {
     private final Pane gamePane;
@@ -19,31 +20,11 @@ public class GameController {
         this.enemies = new ArrayList<>();
         this.path = new Path();
 
-        spawnEnemies();
-        startGameLoop();
-    }
+        List<Point2D> waypoints = new ArrayList<>();
+        waypoints.add(new Point2D(1300, 900));
 
-    private void spawnEnemies() {
-        MiniBear miniBear = new MiniBear(path.getWaypoints());
-        Skeleton skeleton = new Skeleton((path.getWaypoints()));
-        enemies.add(miniBear);
+        Knight knight = new Knight(waypoints);
 
-        gamePane.getChildren().add(miniBear);
-    }
-
-    private void startGameLoop() {
-        AnimationTimer gameLoop = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                update();
-            }
-        };
-        gameLoop.start();
-    }
-
-    private void update() {
-        for (Enemies enemy : enemies) {
-            enemy.move();
-        }
+        gamePane.getChildren().addAll(knight);
     }
 }
