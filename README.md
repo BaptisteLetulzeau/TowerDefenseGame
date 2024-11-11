@@ -4,9 +4,10 @@
 
     - Description
     - Caractéristiques
+    - Design Pattern
     - Installation
     - Instructions de Jeu
-    - Technologies Utilisées
+    - Technologies utilisées
     - Licence
 
 **Description**
@@ -37,6 +38,12 @@
     Suivi des scores et sauvegarde des parties.
     Design modulaire et facilement extensible.
 
+**Design Pattern**
+
+    - Factory pattern (créer des tours (Towers) différentes en fonction de la sélection de l'utilisateur sans avoir à instancier directement les classes concrètes (comme ArrowTower))
+    - Observer pattern (notifier des éléments du jeu (comme une tour) lorsqu'un ennemi entre dans la portée de la tour (pratique pour les attaques automatiques))
+    - Strategy pattern (changer la stratégie d'attaque des tours (par exemple : cibler le premier ennemi, le plus proche, ou le plus faible))
+
 **Installation**
 
     Le jeu utilise la version 23 de java minimum.
@@ -49,6 +56,10 @@
 
     A terminer plus tard
 
+**Technologies utilisées**
+
+    A terminer plus tard
+
 **Licence**
 
-Ce projet ne possède aucune license.
+    Ce projet ne possède aucune license.
