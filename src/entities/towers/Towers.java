@@ -1,6 +1,7 @@
 package entities.towers;
 
 import entities.Entity;
+import entities.enemies.Enemies;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -8,9 +9,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.util.List;
+
 public abstract class Towers extends ImageView  {
     protected double x;
     protected double y;
+    private AttackStrategy attackStrategy;
 
     public Towers(double x, double y, String imagePath) {
         this.x = x;
@@ -25,14 +29,13 @@ public abstract class Towers extends ImageView  {
         setY(y);
     }
 
-    public abstract void shoot(Pane gamePane);
-}
+    public void setAttackStrategy(AttackStrategy strategy) {
+        this.attackStrategy = strategy;
+    }
 
-//public abstract class Towers extends Rectangle {
-//    public Towers(double x, double y) {
-//        super(40, 40);
-//        this.setFill(Color.BLUE);
-//        this.setX(x);
-//        this.setY(y);
-//    }
-//}
+    public void performAttack(List<Enemies> enemies) {
+        if (attackStrategy != null) {
+            attackStrategy.attack(this, enemies);
+        }
+    }
+}

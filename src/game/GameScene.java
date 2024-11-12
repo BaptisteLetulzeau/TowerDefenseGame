@@ -1,5 +1,6 @@
 package game;
 
+import controllers.GameController;
 import entities.towers.ArrowTower;
 import entities.towers.FlailMan;
 import entities.towers.Towers;
@@ -8,7 +9,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
@@ -24,17 +24,9 @@ public class GameScene {
     private final ComboBox<String> towerTypeComboBox;
     private final VBox rootLayout;
     private final List<Rectangle> towerSpots;
-    private final Label healthLabel;
-    private final Label moneyLabel;
-    private final Player player;
+    private final GameController gameController;
 
     public GameScene() {
-
-        player = new Player(50, 100);
-
-        healthLabel = new Label();
-        moneyLabel = new Label();
-
         gamePane = new Pane();
         towerTypeComboBox = new ComboBox<>();
         towerSpots = new ArrayList<>();
@@ -45,6 +37,11 @@ public class GameScene {
         setupMouseClickListener();
 
         rootLayout = new VBox(towerTypeComboBox, gamePane);
+        gameController = new GameController(rootLayout);
+    }
+
+    public VBox getRootLayout() {
+        return rootLayout;
     }
 
     private void setupComboBox() {
@@ -96,33 +93,20 @@ public class GameScene {
         });
     }
 
-    public VBox getRootLayout() {
-        return rootLayout;
-    }
-
     private void addTower(double x, double y, String towerType) {
-        int towerCost = 0;
-        Towers tower = switch (towerType) {
-            case "ArrowTower" -> new ArrowTower(x - 75, y - 75);
-            case "FlailMan" -> new FlailMan(x - 75, y - 75);
-            default -> throw new IllegalArgumentException("Type de tour inconnu : " + towerType);
-        };
+        Towers tower;
+        switch (towerType) {
+            case "ArrowTower":
+                tower = new ArrowTower(x-75, y-75);
+                break;
+            case "FlailMan":
+                tower = new FlailMan(x-75, y-75);
+                break;
+            default:
+                throw new IllegalArgumentException("Type de tour inconnu : " + towerType);
+        }
 
         gamePane.getChildren().add(tower);
         System.out.println("Tour placée à : " + x + ", " + y);
-    }
-
-    private void updatePlayerInfoLabels() {
-        healthLabel.setText("Points de vie : " + player.getHealthPoints());
-        moneyLabel.setText("Argent : " + player.getMoney());
-    }
-
-    public void playerTakeDamage(int damage) {
-        player.decreaseHealth(damage);
-        updatePlayerInfoLabels();
-
-        if (player.getHealthPoints() <= 0) {
-            System.out.println("Game Over!");
-        }
     }
 }

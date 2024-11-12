@@ -8,7 +8,6 @@ public class FlailMan extends Towers {
         super(x, y, "/assets/images/towers/tour.jpg");
     }
 
-    @Override
     public void shoot(Pane gamePane) {
         System.out.println("FlailMan attaque !");
     }
