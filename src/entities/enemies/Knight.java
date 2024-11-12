@@ -10,28 +10,29 @@ import java.util.List;
 
 public class Knight extends Enemies {
 
-    //95
-    private static final int FRAME_WIDTH = 188;
-    private static final int FRAME_HEIGHT = 180;
+    //188 180
+    //192 190
+    private static final int FRAME_WIDTH = 192;
+    private static final int FRAME_HEIGHT = 190;
     private static final int COLUMNS = 10;
-    private static final int FRAMES_IN_SECOND_LINE = 10;
+    private static final int FRAMES_IN_SECOND_LINE = 6;
     private int currentFrame = 0;
     private Timeline animation;
     private List<Point2D> waypoints;
     private int currentWaypointIndex = 0;
     private double speed = 2.0;
-    private int centerY;
+    private static final int centerY = 500;
 
     public Knight(List<Point2D> waypoints) {
         super("assets/images/enemies/Warrior.png", waypoints);
         this.waypoints = waypoints;
 
-        centerY = (1000 / FRAME_HEIGHT) / 2;
+        setX(0);
+        setY(centerY);
 
         setFitWidth(FRAME_WIDTH);
         setFitHeight(FRAME_HEIGHT);
         setViewport(new Rectangle2D(0, 0, FRAME_WIDTH, FRAME_HEIGHT));
-        setY(centerY);
 
         startAnimation();
     }
@@ -39,16 +40,24 @@ public class Knight extends Enemies {
     private void startAnimation() {
         animation = new Timeline(new KeyFrame(Duration.millis(100), event -> {
             updateFrame();
+            move();
         }));
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.play();
     }
 
+    private void move() {
+        double newX = getX() + speed;
+        setX(newX);
+        setY(centerY);
+    }
+
     private void updateFrame() {
         int col = currentFrame % COLUMNS;
         int row = 1;
+        System.out.println(currentFrame);
 
-        if (currentFrame > FRAMES_IN_SECOND_LINE) {
+        if (currentFrame >= FRAMES_IN_SECOND_LINE) {
             currentFrame = 0;
         }
 

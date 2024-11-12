@@ -25,6 +25,9 @@ public class GameController {
 
         Knight knight = new Knight(waypoints);
 
+        knight.setX(0);
+        knight.setY(500);
+
         gamePane.getChildren().addAll(knight);
     }
 }
