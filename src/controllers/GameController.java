@@ -21,7 +21,7 @@ public class GameController {
         this.path = new Path();
 
         List<Point2D> waypoints = new ArrayList<>();
-        waypoints.add(new Point2D(1300, 900));
+        waypoints.add(new Point2D(0, 500));
 
         Knight knight = new Knight(waypoints);
 
