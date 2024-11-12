@@ -8,16 +8,16 @@ import javafx.util.Duration;
 
 import java.util.List;
 
-public class Skeleton extends Enemies {
+public class MiniBear extends Enemies {
     private static final int FRAME_WIDTH = 125;
     private static final int FRAME_HEIGHT = 190;
     private Timeline animation;
     private List<Point2D> waypoints;
     private int currentWaypointIndex = 0;
-    private double speed = 1.5;
+    private double speed = 0.5;
 
-    public Skeleton(List<Point2D> waypoints) {
-        super("assets/images/enemies/skeleton.png", waypoints);
+    public MiniBear(List<Point2D> waypoints) {
+        super("assets/images/enemies/miniBear.png", waypoints);
         this.waypoints = waypoints;
 
         setX(waypoints.get(0).getX());
@@ -62,6 +62,6 @@ public class Skeleton extends Enemies {
     }
 
     public void attack() {
-        System.out.println("Skeleton attaque !");
+        System.out.println("MiniBear attaque !");
     }
 }
