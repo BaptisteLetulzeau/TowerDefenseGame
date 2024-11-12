@@ -14,7 +14,7 @@ public class Path {
 
     private void setupPath() {
         waypoints.add(new Point2D(0, 500));
-        waypoints.add(new Point2D(1300, 500));
+        waypoints.add(new Point2D(1000, 500));
     }
 
     public List<Point2D> getWaypoints() {

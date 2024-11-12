@@ -4,6 +4,8 @@ import controllers.GameController;
 import entities.towers.ArrowTower;
 import entities.towers.FlailMan;
 import entities.towers.Towers;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
@@ -14,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,7 @@ public class GameScene {
     private final VBox rootLayout;
     private final List<Rectangle> towerSpots;
     private final GameController gameController;
+    private Timeline gameLoop;
 
     public GameScene() {
         gamePane = new Pane();
@@ -37,7 +41,21 @@ public class GameScene {
         setupMouseClickListener();
 
         rootLayout = new VBox(towerTypeComboBox, gamePane);
-        gameController = new GameController(rootLayout);
+        gameController = new GameController(gamePane);
+
+        setupGameLoop();
+    }
+
+    private void update() {
+        gameController.update();
+    }
+
+    private void setupGameLoop() {
+        gameLoop = new Timeline(new KeyFrame(Duration.millis(16), e -> {
+            update();
+        }));
+        gameLoop.setCycleCount(Timeline.INDEFINITE);
+        gameLoop.play();
     }
 
     public VBox getRootLayout() {

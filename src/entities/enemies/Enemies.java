@@ -29,33 +29,6 @@ public abstract class Enemies extends ImageView implements Subject {
         }
     }
 
-//    public void move() {
-//        if (currentWaypointIndex >= waypoints.size()) {
-//            return; // L'ennemi a atteint la fin du chemin
-//        }
-//
-//        Point2D target = waypoints.get(currentWaypointIndex);
-//        double deltaX = target.getX() - getX();
-//        double deltaY = target.getY() - getY();
-//        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-//
-//        // Déplacement vers le prochain waypoint
-//        if (distance > speed) {
-//            double moveX = (deltaX / distance) * speed;
-//            double moveY = (deltaY / distance) * speed;
-//            setX(getX() + moveX);
-//            setY(getY() + moveY);
-//        }
-//        else {
-//            // Atteindre le waypoint
-//            setX(target.getX());
-//            setY(target.getY());
-//            currentWaypointIndex++;
-//        }
-//
-//        notifyObservers();
-//    }
-
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);

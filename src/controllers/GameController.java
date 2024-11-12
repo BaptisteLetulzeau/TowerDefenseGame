@@ -20,14 +20,17 @@ public class GameController {
         this.enemies = new ArrayList<>();
         this.path = new Path();
 
-        List<Point2D> waypoints = new ArrayList<>();
-        waypoints.add(new Point2D(0, 500));
-
-        Knight knight = new Knight(waypoints);
-
-        knight.setX(0);
-        knight.setY(500);
+        Knight knight = new Knight(path.getWaypoints());
+        enemies.add(knight);
 
         gamePane.getChildren().addAll(knight);
+    }
+
+    public void update() {
+        for (Enemies enemy : enemies) {
+            if (enemy instanceof Knight) {
+                ((Knight) enemy).move();
+            }
+        }
     }
 }
