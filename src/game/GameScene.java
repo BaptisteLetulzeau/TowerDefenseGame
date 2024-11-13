@@ -4,8 +4,6 @@ import controllers.GameController;
 import entities.towers.ArrowTower;
 import entities.towers.FlailMan;
 import entities.towers.Towers;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
@@ -13,13 +11,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameScene {
 
@@ -27,13 +25,14 @@ public class GameScene {
     private final ComboBox<String> towerTypeComboBox;
     private final VBox rootLayout;
     private final List<Rectangle> towerSpots;
+    private final Map<Rectangle, Towers> towerMap; // Map pour suivre les tours placées par emplacement
     private final GameController gameController;
-    private Timeline gameLoop;
 
     public GameScene() {
         gamePane = new Pane();
         towerTypeComboBox = new ComboBox<>();
         towerSpots = new ArrayList<>();
+        towerMap = new HashMap<>(); // Initialiser la map
 
         setupComboBox();
         setupBackground();
@@ -41,17 +40,7 @@ public class GameScene {
         setupMouseClickListener();
 
         rootLayout = new VBox(towerTypeComboBox, gamePane);
-        gameController = new GameController(gamePane);
-
-        setupGameLoop();
-    }
-
-    private void setupGameLoop() {
-        gameLoop = new Timeline(new KeyFrame(Duration.millis(70), e -> {
-            gameController.update();
-        }));
-        gameLoop.setCycleCount(Timeline.INDEFINITE);
-        gameLoop.play();
+        gameController = new GameController(rootLayout);
     }
 
     public VBox getRootLayout() {
@@ -88,6 +77,7 @@ public class GameScene {
         spot.setStroke(Color.BLACK);
         gamePane.getChildren().add(spot);
         towerSpots.add(spot);
+        towerMap.put(spot, null); // Ajouter chaque emplacement avec une valeur initiale null
     }
 
     private void setupMouseClickListener() {
@@ -98,7 +88,13 @@ public class GameScene {
 
             for (Rectangle spot : towerSpots) {
                 if (spot.contains(clickX, clickY)) {
-                    addTower(spot.getX() + spot.getWidth() / 2, spot.getY() + spot.getHeight() / 2, selectedTowerType);
+                    // Vérifie si l'emplacement est déjà occupé
+                    if (towerMap.get(spot) != null) {
+                        System.out.println("Emplacement déjà occupé. Impossible d'ajouter une autre tour ici.");
+                        return;
+                    }
+                    // Ajouter une tour si l'emplacement est libre
+                    addTower(spot, selectedTowerType);
                     return;
                 }
             }
@@ -107,20 +103,24 @@ public class GameScene {
         });
     }
 
-    private void addTower(double x, double y, String towerType) {
+    private void addTower(Rectangle spot, String towerType) {
         Towers tower;
+        double x = spot.getX() + spot.getWidth() / 2;
+        double y = spot.getY() + spot.getHeight() / 2;
+
         switch (towerType) {
             case "ArrowTower":
-                tower = new ArrowTower(x-75, y-75);
+                tower = new ArrowTower(x - 75, y - 75);
                 break;
             case "FlailMan":
-                tower = new FlailMan(x-75, y-75);
+                tower = new FlailMan(x - 75, y - 75);
                 break;
             default:
                 throw new IllegalArgumentException("Type de tour inconnu : " + towerType);
         }
 
         gamePane.getChildren().add(tower);
+        towerMap.put(spot, tower); // Marquer l'emplacement comme occupé avec cette tour
         System.out.println("Tour placée à : " + x + ", " + y);
     }
 }
