@@ -1,5 +1,6 @@
 package game;
 
+import entities.enemies.Enemies;
 import javafx.geometry.Point2D;
 import java.util.ArrayList;
 import java.util.List;

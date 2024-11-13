@@ -4,10 +4,9 @@ import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import java.util.List;
 
-public class Knight extends Enemies {
+public class Troll extends Enemies {
 
     //192 190
     private static final int FRAME_WIDTH = 192;
@@ -19,12 +18,12 @@ public class Knight extends Enemies {
     private List<Point2D> waypoints;
     private double speed = 2.0;
     private Image spriteSheet;
-    private static final int centerY = -200;
+    private static final int centerY = -140;
 
-    public Knight(List<Point2D> waypoints) {
-        super("assets/images/enemies/Warrior.png", waypoints);
+    public Troll(List<Point2D> waypoints) {
+        super("assets/images/enemies/Troll.png", waypoints);
         this.waypoints = waypoints;
-        this.spriteSheet = new Image(getClass().getResource("/assets/images/enemies/Warrior.png").toExternalForm());
+        this.spriteSheet = new Image(getClass().getResource("/assets/images/enemies/Troll.png").toExternalForm());
 
         setImage(this.spriteSheet);
         setFitWidth(FRAME_WIDTH);
