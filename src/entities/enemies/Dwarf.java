@@ -40,7 +40,7 @@ public class Dwarf extends Enemies {
         double newX = getLayoutX() + speed;
         setLayoutX(newX);
         setLayoutY(centerY);
-        System.out.println(getLayoutX());
+        //System.out.println(getLayoutX());
     }
 
     @Override

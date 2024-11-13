@@ -26,9 +26,10 @@ public class GameScene {
     private final Pane gamePane;
     private final ComboBox<String> towerTypeComboBox;
     private final VBox rootLayout;
-    private final List<Rectangle> towerSpots;
+    private final List<ImageView> towerSpots;
     private final GameController gameController;
     private Timeline gameLoop;
+    private final Image towerSpotImage = new Image("/assets/images/towers/Tower_Purple.png");
 
     public GameScene() {
         gamePane = new Pane();
@@ -75,19 +76,26 @@ public class GameScene {
     }
 
     private void setupTowerSpots() {
-        addTowerSpot(150, 240, 150, 150);
-        addTowerSpot(330, 700, 150, 150);
-        addTowerSpot(600, 220, 150, 150);
-        addTowerSpot(950, 660, 150, 150);
-        addTowerSpot(1200, 220, 150, 150);
+        addTowerSpot(150, 240, "ArrowTower");
+        addTowerSpot(330, 700, "ArrowTower");
+        addTowerSpot(600, 220, "ArrowTower");
+        addTowerSpot(950, 660, "ArrowTower");
+        addTowerSpot(1200, 220, "ArrowTower");
     }
 
-    private void addTowerSpot(double x, double y, double width, double height) {
-        Rectangle spot = new Rectangle(x - width / 2, y - height / 2, width, height);
-        spot.setFill(Color.TRANSPARENT);
-        spot.setStroke(Color.BLACK);
-        gamePane.getChildren().add(spot);
-        towerSpots.add(spot);
+    private void addTowerSpot(double x, double y, String defaultTowerType) {
+        ImageView spotImageView = new ImageView(towerSpotImage);
+        spotImageView.setFitWidth(150);
+        spotImageView.setFitHeight(150);
+        spotImageView.setX(x - 75);
+        spotImageView.setY(y - 75);
+
+        spotImageView.setOnMouseClicked(event -> {
+            addTower(x, y, defaultTowerType);
+        });
+
+        gamePane.getChildren().add(spotImageView);
+        towerSpots.add(spotImageView);
     }
 
     private void setupMouseClickListener() {
@@ -96,12 +104,12 @@ public class GameScene {
             double clickY = event.getY();
             String selectedTowerType = towerTypeComboBox.getValue();
 
-            for (Rectangle spot : towerSpots) {
-                if (spot.contains(clickX, clickY)) {
-                    addTower(spot.getX() + spot.getWidth() / 2, spot.getY() + spot.getHeight() / 2, selectedTowerType);
-                    return;
-                }
-            }
+//            for (Rectangle spot : towerSpots) {
+//                if (spot.contains(clickX, clickY)) {
+//                    addTower(spot.getX() + spot.getWidth() / 2, spot.getY() + spot.getHeight() / 2, selectedTowerType);
+//                    return;
+//                }
+//            }
 
             System.out.println("Clic hors d'un emplacement valide");
         });
@@ -111,10 +119,10 @@ public class GameScene {
         Towers tower;
         switch (towerType) {
             case "ArrowTower":
-                tower = new ArrowTower(x-75, y-75);
+                tower = new ArrowTower(x - 95, y - 140);
                 break;
             case "FlailMan":
-                tower = new FlailMan(x-75, y-75);
+                tower = new FlailMan(x - 95, y - 140);
                 break;
             default:
                 throw new IllegalArgumentException("Type de tour inconnu : " + towerType);
