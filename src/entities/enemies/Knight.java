@@ -5,6 +5,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.util.Duration;
 import java.util.List;
 
@@ -19,60 +21,62 @@ public class Knight extends Enemies {
     private int currentFrame = 0;
     private Timeline animation;
     private List<Point2D> waypoints;
-    private int currentWaypointIndex = 0;
     private double speed = 2.0;
-    private static final int centerY = 500;
+    private Image spriteSheet;
+    private static final int centerY = -200;
 
     public Knight(List<Point2D> waypoints) {
         super("assets/images/enemies/Warrior.png", waypoints);
         this.waypoints = waypoints;
+        this.spriteSheet = new Image(getClass().getResource("/assets/images/enemies/Warrior.png").toExternalForm());
 
-        setX(0);
-        setY(centerY);
-
+        setImage(this.spriteSheet);
         setFitWidth(FRAME_WIDTH);
         setFitHeight(FRAME_HEIGHT);
-        setViewport(new Rectangle2D(0, 0, FRAME_WIDTH, FRAME_HEIGHT));
-
-        startAnimation();
-    }
-
-    private void startAnimation() {
-        animation = new Timeline(new KeyFrame(Duration.millis(100), event -> {
-            updateFrame();
-            move();
-        }));
-        animation.setCycleCount(Timeline.INDEFINITE);
-        animation.play();
+        setViewport(new Rectangle2D(0, FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT));
     }
 
     private void move() {
-        double newX = getX() + speed;
-        setX(newX);
-        setY(centerY);
+        if (hasReachedFinalWaypoint()) {
+            return;
+        }
+
+        double newX = getLayoutX() + speed;
+        setLayoutX(newX);
+        setLayoutY(centerY);
+        System.out.println(getLayoutX());
+    }
+
+    @Override
+    public void update() {
+        move();
+        updateFrame();
+    }
+
+    private boolean hasReachedFinalWaypoint() {
+        Point2D finalWaypoint = waypoints.getLast();
+        double distanceToFinalWaypoint = finalWaypoint.distance(getLayoutX(), getLayoutY());
+
+        return distanceToFinalWaypoint <= 5;
     }
 
     private void updateFrame() {
         int col = currentFrame % COLUMNS;
         int row = 1;
-        System.out.println(currentFrame);
-
-        if (currentFrame >= FRAMES_IN_SECOND_LINE) {
-            currentFrame = 0;
-        }
 
         setViewport(new Rectangle2D(col * FRAME_WIDTH, row * FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT));
-
         currentFrame = (currentFrame + 1) % FRAMES_IN_SECOND_LINE;
+    }
+
+    private Image subImage(Image source, int x, int y, int width, int height) {
+        WritableImage image = new WritableImage(width, height);
+        image.getPixelWriter().setPixels(0, 0, width, height, source.getPixelReader(), x, y);
+        return image;
     }
 
     public void stopAnimation() {
         if (animation != null) {
             animation.stop();
         }
-    }
-
-    public void attack() {
-        System.out.println("Knight attaque !");
     }
 }
