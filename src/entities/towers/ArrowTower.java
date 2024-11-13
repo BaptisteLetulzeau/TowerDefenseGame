@@ -3,55 +3,39 @@ package entities.towers;
 import entities.enemies.Enemies;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class ArrowTower extends Towers implements Observer {
 
     private static final int FRAME_WIDTH = 192;  // Largeur d'une frame
     private static final int FRAME_HEIGHT = 190; // Hauteur d'une frame
-    private static final int COLUMNS = 6;        // Colonnes dans le sprite sheet
-    private static final int ROWS = 2;           // Lignes dans le sprite sheet
+    private static final int COLUMNS = 8;        // Colonnes dans le sprite sheet
+    private static final int ROWS = 7;           // Lignes dans le sprite sheet
+
+    // Variable pour stocker l'unique instance de ArrowTower
+    private static ArrowTower uniqueTower = null;
 
     private boolean isShooting = false;
     private Timeline animation;
     private int currentFrame = 0;
 
-    // Set statique pour suivre les positions occupées
-    private static Set<String> occupiedPositions = new HashSet<>();
-
-    // Méthode pour vérifier si une position est occupée
-    public static boolean isPositionOccupied(double x, double y) {
-        String positionKey = x + "," + y;
-        return occupiedPositions.contains(positionKey);
-    }
-
-    // Méthode pour marquer une position comme occupée
-    public static void markPositionAsOccupied(double x, double y) {
-        String positionKey = x + "," + y;
-        occupiedPositions.add(positionKey);
-    }
-
-    // Méthode pour créer une nouvelle tour à une position donnée
+    // Méthode pour créer une seule et unique tour
     public static ArrowTower createArrowTower(double x, double y) {
-        if (isPositionOccupied(x, y)) {
-            System.out.println("Une tour existe déjà à cet endroit, impossible d'en placer une autre.");
-            return null;  // Retourne null si la position est déjà occupée
+        if (uniqueTower != null) {
+            System.out.println("Une seule tour peut être créée. Impossible d'en créer une autre.");
+            return null;  // Empêche toute autre création de tour
         }
 
-        // Marque la position comme occupée
-        markPositionAsOccupied(x, y);
-
-        // Créer et retourner l'instance de ArrowTower
-        return new ArrowTower(x, y);
+        // Créer et stocker l'instance unique de ArrowTower
+        uniqueTower = new ArrowTower(x, y);
+        return uniqueTower;
     }
 
-    // Constructeur
+    // Constructeur privé pour empêcher des instanciations externes
     public ArrowTower(double x, double y) {
-        super(x, y, "/assets/images/towers/Archer_Blue.png");  // Chemin de l'image du sprite
+        super(x, y, "/assets/images/towers/Archer.png");  // Chemin de l'image du sprite
 
         setX(x);
         setY(y);
@@ -79,17 +63,20 @@ public class ArrowTower extends Towers implements Observer {
     }
 
     private void updateFrame() {
-        // Calculer la colonne et la ligne de la frame courante
-        int col = currentFrame % COLUMNS;
-        int row = currentFrame / COLUMNS;
+        // Limite le nombre de frames aux 6 premières colonnes (sur 2 lignes)
+        int maxFrames = 6;  // Seulement 6 frames dans les 2 premières lignes
+
+        // Calculer la colonne de la frame courante en prenant en compte les 6 premières colonnes
+        int col = currentFrame % maxFrames;  // Ici, maxFrames = 6
+        int row = currentFrame / maxFrames;  // Sur 2 lignes (0 ou 1)
 
         // Mettre à jour le viewport pour afficher la frame actuelle
         setViewport(new Rectangle2D(col * FRAME_WIDTH, row * FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT));
 
-        // Passer à la frame suivante
-        currentFrame = (currentFrame + 1) % (COLUMNS * ROWS);
+        // Passer à la frame suivante, limité à 6 colonnes
+        currentFrame = (currentFrame + 1) % maxFrames + (row * maxFrames);
     }
-
+    
     @Override
     public void update(Enemies enemy) {
         if (isInRange(enemy)) {
