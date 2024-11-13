@@ -4,10 +4,10 @@ import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
+
 import java.util.List;
 
-public class Knight extends Enemies {
+public class Gnom extends Enemies {
 
     //192 190
     private static final int FRAME_WIDTH = 192;
@@ -21,10 +21,10 @@ public class Knight extends Enemies {
     private Image spriteSheet;
     private static final int centerY = -200;
 
-    public Knight(List<Point2D> waypoints) {
-        super("assets/images/enemies/Warrior.png", waypoints);
+    public Gnom(List<Point2D> waypoints) {
+        super("assets/images/enemies/Gnom.png", waypoints);
         this.waypoints = waypoints;
-        this.spriteSheet = new Image(getClass().getResource("/assets/images/enemies/Warrior.png").toExternalForm());
+        this.spriteSheet = new Image(getClass().getResource("/assets/images/enemies/Gnom.png").toExternalForm());
 
         setImage(this.spriteSheet);
         setFitWidth(FRAME_WIDTH);

@@ -2,15 +2,14 @@ package controllers;
 
 import entities.enemies.Dwarf;
 import entities.enemies.Enemies;
-import entities.enemies.Knight;
+import entities.enemies.Gnom;
 //import entities.enemies.Skeleton;
 import entities.enemies.Troll;
-import entities.towers.ArrowTower;
 import game.Path;
 import javafx.scene.layout.Pane;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.geometry.Point2D;
+
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -27,7 +26,7 @@ public class GameController {
         this.enemies = new ArrayList<>();
         this.path = new Path();
 
-        Knight knight = new Knight(path.getWaypoints());
+        Gnom knight = new Gnom(path.getWaypoints());
         Troll troll = new Troll(path.getWaypoints());
         Dwarf dwarf = new Dwarf(path.getWaypoints());
         enemies.add(knight);
@@ -46,7 +45,7 @@ public class GameController {
 
     public void update() {
         for (Enemies enemy : enemies) {
-            if (enemy instanceof Knight knight){
+            if (enemy instanceof Gnom knight){
                 knight.update();
 
                 if (knight.hasReachedFinalWaypoint()) {

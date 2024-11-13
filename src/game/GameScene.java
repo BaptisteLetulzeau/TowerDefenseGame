@@ -39,7 +39,6 @@ public class GameScene {
         setupComboBox();
         setupBackground();
         setupTowerSpots();
-        setupMouseClickListener();
 
         rootLayout = new VBox(towerTypeComboBox, gamePane);
         gameController = new GameController(gamePane);
@@ -60,7 +59,7 @@ public class GameScene {
     }
 
     private void setupComboBox() {
-        towerTypeComboBox.getItems().addAll("ArrowTower", "FlailMan");
+        towerTypeComboBox.getItems().addAll("ArrowTower", "KnightMan");
         towerTypeComboBox.setValue("ArrowTower");
     }
 
@@ -91,28 +90,12 @@ public class GameScene {
         spotImageView.setY(y - 75);
 
         spotImageView.setOnMouseClicked(event -> {
-            addTower(x, y, defaultTowerType);
+            String currentSelectedTowerType = towerTypeComboBox.getValue();
+            addTower(x, y, currentSelectedTowerType);
         });
 
         gamePane.getChildren().add(spotImageView);
         towerSpots.add(spotImageView);
-    }
-
-    private void setupMouseClickListener() {
-        gamePane.setOnMouseClicked((MouseEvent event) -> {
-            double clickX = event.getX();
-            double clickY = event.getY();
-            String selectedTowerType = towerTypeComboBox.getValue();
-
-//            for (Rectangle spot : towerSpots) {
-//                if (spot.contains(clickX, clickY)) {
-//                    addTower(spot.getX() + spot.getWidth() / 2, spot.getY() + spot.getHeight() / 2, selectedTowerType);
-//                    return;
-//                }
-//            }
-
-            System.out.println("Clic hors d'un emplacement valide");
-        });
     }
 
     private void addTower(double x, double y, String towerType) {
@@ -121,7 +104,7 @@ public class GameScene {
             case "ArrowTower":
                 tower = new ArrowTower(x - 95, y - 140);
                 break;
-            case "FlailMan":
+            case "KnightMan":
                 tower = new FlailMan(x - 95, y - 140);
                 break;
             default:
@@ -129,6 +112,6 @@ public class GameScene {
         }
 
         gamePane.getChildren().add(tower);
-        System.out.println("Tour placée à : " + x + ", " + y);
+        System.out.println("Tour " + towerType + " placée à : " + x + ", " + y);
     }
 }
