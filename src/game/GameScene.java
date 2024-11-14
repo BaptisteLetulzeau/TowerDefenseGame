@@ -107,6 +107,6 @@ public class GameScene {
         }
 
         gamePane.getChildren().add(tower);
-        System.out.println("Tour " + towerType + " placée à : " + x + ", " + y);
+        System.out.println(towerType + " placé à : " + x + ", " + y);
     }
 }
