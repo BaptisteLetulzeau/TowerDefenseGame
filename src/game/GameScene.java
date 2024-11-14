@@ -42,7 +42,7 @@ public class GameScene {
     }
 
     private void setupGameLoop() {
-        gameLoop = new Timeline(new KeyFrame(Duration.millis(70), e -> {
+        gameLoop = new Timeline(new KeyFrame(Duration.millis(100), e -> {
             gameController.update();
         }));
         gameLoop.setCycleCount(Timeline.INDEFINITE);
