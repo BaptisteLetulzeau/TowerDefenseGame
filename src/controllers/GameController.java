@@ -28,10 +28,17 @@ public class GameController {
     private Text gameOverText;
     private Timeline waveTimeline;
 
+    private int playerHealth;
+    private int playerMoney;
+    private int playerScore;
+
     public GameController(Pane gamePane) {
         this.gamePane = gamePane;
         this.activeEnemies = new ArrayList<>();
         this.path = new Path();
+        this.playerHealth = 10;
+        this.playerMoney = 100;
+        this.playerScore = 0;
 
         this.waves = createWaves();
 
@@ -135,13 +142,41 @@ public class GameController {
         hideMessageTimeline.play();
     }
 
-
     private void setupGameOverText() {
-        gameOverText = new Text("YOU LOOSE !");
+        gameOverText = new Text("YOU LOST !");
         gameOverText.setFont(Font.font("Arial", FontWeight.BOLD, 50));
         gameOverText.setFill(Color.RED);
         gameOverText.setTextAlignment(TextAlignment.CENTER);
         gameOverText.setVisible(false);
         gamePane.getChildren().add(gameOverText);
+    }
+
+    private void decreasePlayerHealth(int amount) {
+        playerHealth -= amount;
+        if (playerHealth < 0) playerHealth = 0;
+    }
+
+    private void increasePlayerMoney(int amount) {
+        playerMoney += amount;
+    }
+
+    private void decreasePlayerMoney(int amount) {
+        playerMoney -= amount;
+    }
+
+    private void increasePlayerScore(int amount) {
+        playerScore += amount;
+    }
+
+    public int getPlayerHealth() {
+        return playerHealth;
+    }
+
+    public int getPlayerMoney() {
+        return playerMoney;
+    }
+
+    public int getPlayerScore() {
+        return playerScore;
     }
 }

@@ -7,8 +7,10 @@ import entities.towers.Towers;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox; // Import du HBox
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -26,6 +28,11 @@ public class GameScene {
     private Timeline gameLoop;
     private final Image towerSpotImage = new Image("/assets/images/towers/Tower_Purple.png");
 
+    private Label healthLabel;
+    private Label moneyLabel;
+    private Label scoreLabel;
+    private HBox playerInfoBox; // Déclaration du HBox pour les labels
+
     public GameScene() {
         gamePane = new Pane();
         towerTypeComboBox = new ComboBox<>();
@@ -35,8 +42,13 @@ public class GameScene {
         setupBackground();
         setupTowerSpots();
 
-        rootLayout = new VBox(towerTypeComboBox, gamePane);
         gameController = new GameController(gamePane);
+
+        setupPlayerInfoLabels(); // Initialiser les labels
+        updatePlayerInfoLabels(); // Mettre à jour les labels avec les valeurs initiales
+
+        // Ajouter le HBox des labels au rootLayout
+        rootLayout = new VBox(towerTypeComboBox, playerInfoBox, gamePane);
 
         setupGameLoop();
     }
@@ -44,6 +56,7 @@ public class GameScene {
     private void setupGameLoop() {
         gameLoop = new Timeline(new KeyFrame(Duration.millis(100), e -> {
             gameController.update();
+            updatePlayerInfoLabels(); // Mettre à jour les labels pendant le jeu
         }));
         gameLoop.setCycleCount(Timeline.INDEFINITE);
         gameLoop.play();
@@ -108,5 +121,24 @@ public class GameScene {
 
         gamePane.getChildren().add(tower);
         System.out.println("Tour " + towerType + " placée à : " + x + ", " + y);
+    }
+
+    private void setupPlayerInfoLabels() {
+        healthLabel = new Label("Points de vie : " + gameController.getPlayerHealth());
+        moneyLabel = new Label("Argent : " + gameController.getPlayerMoney());
+        scoreLabel = new Label("Score : " + gameController.getPlayerScore());
+
+        healthLabel.setStyle("-fx-font-size: 16px;");
+        moneyLabel.setStyle("-fx-font-size: 16px;");
+        scoreLabel.setStyle("-fx-font-size: 16px;");
+
+        playerInfoBox = new HBox(10, healthLabel, moneyLabel, scoreLabel);
+        playerInfoBox.setStyle("-fx-padding: 10px;"); // Optionnel : ajouter du padding
+    }
+
+    private void updatePlayerInfoLabels() {
+        healthLabel.setText("Points de vie : " + gameController.getPlayerHealth());
+        moneyLabel.setText("Argent : " + gameController.getPlayerMoney());
+        scoreLabel.setText("Score : " + gameController.getPlayerScore());
     }
 }
