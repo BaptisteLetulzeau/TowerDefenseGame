@@ -5,6 +5,9 @@ import entities.enemies.Enemies;
 import entities.enemies.Gnom;
 import entities.enemies.Troll;
 import game.Path;
+import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -128,16 +131,25 @@ public class GameController {
             startMessage.setY((newValue.doubleValue() - startMessage.getBoundsInLocal().getHeight()) / 2);
         });
 
-        Timeline hideMessageTimeline = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
-            gamePane.getChildren().remove(startMessage);
-        }));
-        hideMessageTimeline.setCycleCount(1);
-        hideMessageTimeline.play();
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(2), startMessage);
+        scaleTransition.setFromX(0.5);
+        scaleTransition.setFromY(0.5);
+        scaleTransition.setToX(2.5);
+        scaleTransition.setToY(2.5);
+
+        FadeTransition fadeTransition = new FadeTransition(Duration.seconds(2), startMessage);
+        fadeTransition.setFromValue(0.0);
+        fadeTransition.setToValue(1.0);
+
+        scaleTransition.play();
+        fadeTransition.play();
+
+        fadeTransition.setOnFinished(e -> gamePane.getChildren().remove(startMessage));
     }
 
 
     private void setupGameOverText() {
-        gameOverText = new Text("YOU LOOSE !");
+        gameOverText = new Text("YOU LOST");
         gameOverText.setFont(Font.font("Arial", FontWeight.BOLD, 50));
         gameOverText.setFill(Color.RED);
         gameOverText.setTextAlignment(TextAlignment.CENTER);

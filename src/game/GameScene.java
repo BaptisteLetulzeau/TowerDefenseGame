@@ -100,7 +100,7 @@ public class GameScene {
                 tower = new ArrowTower(x - 95, y - 140);
                 break;
             case "KnightMan":
-                tower = new KnightMan(x - 95, y - 140);
+                tower = new KnightMan(x - 95, y - 50);
                 break;
             default:
                 throw new IllegalArgumentException("Type de tour inconnu : " + towerType);
