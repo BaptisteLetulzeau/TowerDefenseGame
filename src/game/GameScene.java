@@ -2,20 +2,15 @@ package game;
 
 import controllers.GameController;
 import entities.towers.ArrowTower;
-import entities.towers.FlailMan;
+import entities.towers.KnightMan;
 import entities.towers.Towers;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -105,7 +100,7 @@ public class GameScene {
                 tower = new ArrowTower(x - 95, y - 140);
                 break;
             case "KnightMan":
-                tower = new FlailMan(x - 95, y - 140);
+                tower = new KnightMan(x - 95, y - 140);
                 break;
             default:
                 throw new IllegalArgumentException("Type de tour inconnu : " + towerType);

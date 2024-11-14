@@ -13,8 +13,6 @@ import java.util.List;
 
 public abstract class Enemies extends ImageView implements Subject {
     protected List<Point2D> waypoints;
-    protected int currentWaypointIndex = 0;
-    protected double speed = 2.0;
     private List<Observer> observers = new ArrayList<>();
 
     public Enemies(String imagePath, List<Point2D> waypoints) {
@@ -47,4 +45,5 @@ public abstract class Enemies extends ImageView implements Subject {
     }
 
     public abstract void update();
+    public abstract boolean hasReachedFinalWaypoint();
 }

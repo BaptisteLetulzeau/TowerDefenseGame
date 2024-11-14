@@ -6,30 +6,30 @@ import javafx.animation.Timeline;
 import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
 
-public class FlailMan extends Towers implements Observer {
+public class KnightMan extends Towers implements Observer {
 
     private static final int FRAME_WIDTH = 192;
     private static final int FRAME_HEIGHT = 190;
     private static final int COLUMNS = 8;
     private static final int ROWS = 7;
 
-    private static FlailMan uniqueTower = null;
+    private static KnightMan uniqueTower = null;
 
     private boolean isShooting = false;
     private Timeline animation;
     private int currentFrame = 0;
 
-    public static FlailMan createArrowTower(double x, double y) {
+    public static KnightMan createArrowTower(double x, double y) {
         if (uniqueTower != null) {
             System.out.println("Une seule tour peut être créée. Impossible d'en créer une autre.");
             return null;
         }
 
-        uniqueTower = new FlailMan(x, y);
+        uniqueTower = new KnightMan(x, y);
         return uniqueTower;
     }
 
-    public FlailMan(double x, double y) {
+    public KnightMan(double x, double y) {
         super(x, y, "/assets/images/towers/Warrior.png");
 
         setX(x);
