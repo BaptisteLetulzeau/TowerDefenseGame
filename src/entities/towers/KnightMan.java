@@ -3,35 +3,34 @@ package entities.towers;
 import entities.enemies.Enemies;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
 
-public class ArrowTower extends Towers implements Observer {
+public class KnightMan extends Towers implements Observer {
 
     private static final int FRAME_WIDTH = 192;
     private static final int FRAME_HEIGHT = 190;
     private static final int COLUMNS = 8;
     private static final int ROWS = 7;
 
-    private static ArrowTower uniqueTower = null;
+    private static KnightMan uniqueTower = null;
 
     private boolean isShooting = false;
     private Timeline animation;
     private int currentFrame = 0;
 
-    public static ArrowTower createArrowTower(double x, double y) {
+    public static KnightMan createArrowTower(double x, double y) {
         if (uniqueTower != null) {
             System.out.println("Une seule tour peut être créée. Impossible d'en créer une autre.");
             return null;
         }
 
-        uniqueTower = new ArrowTower(x, y);
+        uniqueTower = new KnightMan(x, y);
         return uniqueTower;
     }
 
-    public ArrowTower(double x, double y) {
-        super(x, y, "/assets/images/towers/Archer.png");
+    public KnightMan(double x, double y) {
+        super(x, y, "/assets/images/towers/Warrior.png");
 
         setX(x);
         setY(y);
@@ -65,7 +64,7 @@ public class ArrowTower extends Towers implements Observer {
 
         currentFrame = (currentFrame + 1) % maxFrames + (row * maxFrames);
     }
-    
+
     @Override
     public void update(Enemies enemy) {
         if (isInRange(enemy)) {
