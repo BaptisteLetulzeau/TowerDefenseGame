@@ -39,8 +39,6 @@ public class Troll extends Enemies {
         double newX = getLayoutX() + speed;
         setLayoutX(newX);
         setLayoutY(centerY);
-
-        notifyObservers();
         //System.out.println("LayoutX " + getLayoutX());
         //System.out.println("LayoutY " + getLayoutY());
     }

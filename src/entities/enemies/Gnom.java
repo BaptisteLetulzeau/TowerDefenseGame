@@ -40,8 +40,6 @@ public class Gnom extends Enemies {
         double newX = getLayoutX() + speed;
         setLayoutX(newX);
         setLayoutY(centerY);
-
-        notifyObservers();
         //System.out.println(getLayoutX());
     }
 

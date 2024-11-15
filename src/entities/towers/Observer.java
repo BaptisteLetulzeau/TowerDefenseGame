@@ -1,9 +1,11 @@
 package entities.towers;
 
+import controllers.GameController;
 import entities.enemies.Enemies;
 
-import javafx.geometry.Point2D;
-
 public interface Observer {
-    void updatePosition(Point2D position);
+//    void startShooting(GameController gameController);
+//    void stopShooting(GameController gameController);
+//    boolean isEnemyInRange(Enemies enemy);
+//    void attackEnemyInRange(Enemies enemy);
 }

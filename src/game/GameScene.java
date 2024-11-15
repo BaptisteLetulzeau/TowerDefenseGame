@@ -115,6 +115,10 @@ public class GameScene {
         }
 
         gamePane.getChildren().add(tower);
+
+        // On lance le mécanisme de tir
+        tower.startShooting(gameController);
+
         System.out.println(towerType + " placé à : " + x + ", " + y);
     }
 }

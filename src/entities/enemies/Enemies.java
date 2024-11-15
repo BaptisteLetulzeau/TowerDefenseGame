@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class Enemies extends ImageView implements Subject {
     private final List<Observer> observers = new ArrayList<>();
     protected List<Point2D> waypoints;
-    private double health;
+    private int health;
 
     public Enemies(String imagePath, List<Point2D> waypoints) {
         this.waypoints = waypoints;
@@ -47,18 +47,20 @@ public abstract class Enemies extends ImageView implements Subject {
 
     @Override
     public void notifyObservers() {
-        for (Observer observer : observers) {
-            if (observer instanceof Towers) {
-                Towers tower = (Towers) observer;
-                if (tower.isEnemyInRange(this)) {
-                    tower.onEnemyInRange(this);
-                }
-            }
+        System.out.println("Tour mise à jour !");
+    }
+
+    public void reduceHealth(int attackRate) {
+        System.out.println("Ancienne vie: " + this.health);
+        this.health -= attackRate;
+        System.out.println("Nouvelle vie: " + this.health);
+        if (this.health <= 0) {
+            this.health = 0;
         }
     }
 
-    public Point2D getPosition() {
-        return new Point2D(getLayoutX(), getLayoutY());
+    public boolean isDead() {
+        return this.health <= 0;
     }
 
     public boolean isDefeated() {
