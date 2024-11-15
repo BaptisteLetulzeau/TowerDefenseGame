@@ -79,7 +79,7 @@ public class GameController {
 
     private void spawnEnemies(List<Enemies> currentWave) {
         if (!currentWave.isEmpty()) {
-            Enemies enemy = currentWave.remove(0);
+            Enemies enemy = currentWave.removeFirst();
             activeEnemies.add(enemy);
             gamePane.getChildren().add(enemy);
         }
