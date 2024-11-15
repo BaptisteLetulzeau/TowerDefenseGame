@@ -13,12 +13,12 @@ import java.util.List;
 
 public abstract class Enemies extends ImageView implements Subject {
     protected List<Point2D> waypoints;
-    protected int currentWaypointIndex = 0;
-    protected double speed = 2.0;
     private List<Observer> observers = new ArrayList<>();
+    private double health;
 
     public Enemies(String imagePath, List<Point2D> waypoints) {
         this.waypoints = waypoints;
+        this.health = 100;
         setImage(new Image(imagePath));
         setFitWidth(100);
         setFitHeight(100);
@@ -46,5 +46,14 @@ public abstract class Enemies extends ImageView implements Subject {
         }
     }
 
+    public void takeDamage(double damage) {
+        this.health -= damage;
+    }
+
+    public boolean isDefeated() {
+        return this.health <= 0;
+    }
+
     public abstract void update();
+    public abstract boolean hasReachedFinalWaypoint();
 }

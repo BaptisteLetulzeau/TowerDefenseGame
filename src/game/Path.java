@@ -1,5 +1,6 @@
 package game;
 
+import entities.enemies.Enemies;
 import javafx.geometry.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +14,8 @@ public class Path {
     }
 
     private void setupPath() {
-        waypoints.add(new Point2D(0, 500));
-        waypoints.add(new Point2D(1200, 500));
+        waypoints.add(new Point2D(-100, 500));
+        waypoints.add(new Point2D(1350, 500));
     }
 
     public List<Point2D> getWaypoints() {
