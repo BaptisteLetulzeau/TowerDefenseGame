@@ -18,7 +18,7 @@ public class Troll extends Enemies {
     private List<Point2D> waypoints;
     private double speed = 2.5;
     private Image spriteSheet;
-    private static final int centerY = -140;
+    private static final int centerY = 300;
 
     public Troll(List<Point2D> waypoints) {
         super("assets/images/enemies/Troll.png", waypoints);
@@ -39,7 +39,10 @@ public class Troll extends Enemies {
         double newX = getLayoutX() + speed;
         setLayoutX(newX);
         setLayoutY(centerY);
-        //System.out.println(getLayoutX());
+
+        notifyObservers();
+        //System.out.println("LayoutX " + getLayoutX());
+        //System.out.println("LayoutY " + getLayoutY());
     }
 
     @Override

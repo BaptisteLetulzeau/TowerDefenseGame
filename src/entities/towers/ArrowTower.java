@@ -7,16 +7,13 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
 
-public class ArrowTower extends Towers implements Observer {
+public class ArrowTower extends Towers {
 
     private static final int FRAME_WIDTH = 192;
     private static final int FRAME_HEIGHT = 190;
     private static final int COLUMNS = 8;
     private static final int ROWS = 7;
-
     private static ArrowTower uniqueTower = null;
-
-    private boolean isShooting = false;
     private Timeline animation;
     private int currentFrame = 0;
 
@@ -31,7 +28,7 @@ public class ArrowTower extends Towers implements Observer {
     }
 
     public ArrowTower(double x, double y) {
-        super(x, y, "/assets/images/towers/Archer.png");
+        super(x, y, "/assets/images/towers/Archer.png", 350);
 
         setX(x);
         setY(y);
@@ -47,9 +44,6 @@ public class ArrowTower extends Towers implements Observer {
     private void startAnimation() {
         animation = new Timeline(new KeyFrame(Duration.millis(100), event -> {
             updateFrame();
-            if (isShooting) {
-                shoot();
-            }
         }));
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.play();
@@ -64,31 +58,5 @@ public class ArrowTower extends Towers implements Observer {
         setViewport(new Rectangle2D(col * FRAME_WIDTH, row * FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT));
 
         currentFrame = (currentFrame + 1) % maxFrames + (row * maxFrames);
-    }
-    
-    @Override
-    public void update(Enemies enemy) {
-        if (isInRange(enemy)) {
-            isShooting = true;
-        } else {
-            isShooting = false;
-        }
-    }
-
-    private void shoot() {
-        if (isShooting) {
-            System.out.println("ArrowTower tire !");
-        }
-    }
-
-    private boolean isInRange(Enemies enemy) {
-        double distance = Math.sqrt(Math.pow(enemy.getX() - getX(), 2) + Math.pow(enemy.getY() - getY(), 2));
-        return distance < 200;
-    }
-
-    public void stopAnimation() {
-        if (animation != null) {
-            animation.stop();
-        }
     }
 }

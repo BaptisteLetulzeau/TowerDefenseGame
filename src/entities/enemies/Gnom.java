@@ -19,7 +19,7 @@ public class Gnom extends Enemies {
     private List<Point2D> waypoints;
     private double speed = 2.5;
     private Image spriteSheet;
-    private static final int centerY = -200;
+    private static final int centerY = 240;
 
     public Gnom(List<Point2D> waypoints) {
         super("assets/images/enemies/Gnom.png", waypoints);
@@ -40,6 +40,8 @@ public class Gnom extends Enemies {
         double newX = getLayoutX() + speed;
         setLayoutX(newX);
         setLayoutY(centerY);
+
+        notifyObservers();
         //System.out.println(getLayoutX());
     }
 

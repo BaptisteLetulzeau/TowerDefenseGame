@@ -2,6 +2,8 @@ package entities.towers;
 
 import entities.enemies.Enemies;
 
+import javafx.geometry.Point2D;
+
 public interface Observer {
-    void update(Enemies enemy);
+    void updatePosition(Point2D position);
 }

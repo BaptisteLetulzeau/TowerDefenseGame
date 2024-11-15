@@ -4,6 +4,7 @@ import entities.enemies.Dwarf;
 import entities.enemies.Enemies;
 import entities.enemies.Gnom;
 import entities.enemies.Troll;
+import entities.towers.Towers;
 import game.Path;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
@@ -24,12 +25,13 @@ import java.util.List;
 
 public class GameController {
     private final Pane gamePane;
-    private final List<Enemies> activeEnemies;
+    private List<Enemies> activeEnemies;
     private final List<List<Enemies>> waves;
     private final Path path;
     private int currentWaveIndex = 0;
     private Text gameOverText;
     private Timeline waveTimeline;
+    private final List<Towers> activeTowers = new ArrayList<>();
 
     public GameController(Pane gamePane) {
         this.gamePane = gamePane;
@@ -67,19 +69,19 @@ public class GameController {
             return;
         }
 
-        List<Enemies> currentWave = new ArrayList<>(waves.get(currentWaveIndex));
-        activeEnemies.addAll(currentWave);
+        activeEnemies = new ArrayList<>(waves.get(currentWaveIndex));
 
         currentWaveIndex++;
 
-        waveTimeline = new Timeline(new KeyFrame(Duration.seconds(2), e -> spawnEnemies(currentWave)));
-        waveTimeline.setCycleCount(currentWave.size());
+        waveTimeline = new Timeline(new KeyFrame(Duration.seconds(2), e -> spawnEnemies(activeEnemies)));
+        waveTimeline.setCycleCount(activeEnemies.size());
         waveTimeline.play();
     }
 
     private void spawnEnemies(List<Enemies> currentWave) {
         if (!currentWave.isEmpty()) {
             Enemies enemy = currentWave.removeFirst();
+
             activeEnemies.add(enemy);
             gamePane.getChildren().add(enemy);
         }
@@ -155,5 +157,19 @@ public class GameController {
         gameOverText.setTextAlignment(TextAlignment.CENTER);
         gameOverText.setVisible(false);
         gamePane.getChildren().add(gameOverText);
+    }
+
+    public List<Enemies> getActiveEnemies() {
+        return activeEnemies;
+    }
+
+    public void addTower(Towers tower) {
+        activeTowers.add(tower);
+
+        for (Enemies enemy : getActiveEnemies()) {
+            enemy.addObserver(tower);
+        }
+
+        System.out.println("Tour ajoutée et enregistrée comme observateur pour les ennemis actifs.");
     }
 }

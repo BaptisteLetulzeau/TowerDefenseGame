@@ -10,11 +10,7 @@ public class KnightMan extends Towers implements Observer {
 
     private static final int FRAME_WIDTH = 192;
     private static final int FRAME_HEIGHT = 190;
-    private static final int COLUMNS = 8;
-    private static final int ROWS = 7;
-
     private static KnightMan uniqueTower = null;
-
     private boolean isShooting = false;
     private Timeline animation;
     private int currentFrame = 0;
@@ -30,7 +26,7 @@ public class KnightMan extends Towers implements Observer {
     }
 
     public KnightMan(double x, double y) {
-        super(x, y, "/assets/images/towers/Warrior.png");
+        super(x, y, "/assets/images/towers/Warrior.png", 1000);
 
         setX(x);
         setY(y);
@@ -65,29 +61,9 @@ public class KnightMan extends Towers implements Observer {
         currentFrame = (currentFrame + 1) % maxFrames + (row * maxFrames);
     }
 
-    @Override
-    public void update(Enemies enemy) {
-        if (isInRange(enemy)) {
-            isShooting = true;
-        } else {
-            isShooting = false;
-        }
-    }
-
     private void shoot() {
         if (isShooting) {
             System.out.println("ArrowTower tire !");
-        }
-    }
-
-    private boolean isInRange(Enemies enemy) {
-        double distance = Math.sqrt(Math.pow(enemy.getX() - getX(), 2) + Math.pow(enemy.getY() - getY(), 2));
-        return distance < 200;
-    }
-
-    public void stopAnimation() {
-        if (animation != null) {
-            animation.stop();
         }
     }
 }

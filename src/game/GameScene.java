@@ -1,6 +1,7 @@
 package game;
 
 import controllers.GameController;
+import entities.enemies.Enemies;
 import entities.towers.ArrowTower;
 import entities.towers.KnightMan;
 import entities.towers.Towers;
@@ -30,11 +31,11 @@ public class GameScene {
     private final GameController gameController;
     private Timeline gameLoop;
     private final Image towerSpotImage = new Image("/assets/images/towers/Tower_Purple.png");
+
     public GameScene() {
         gamePane = new Pane();
         towerTypeComboBox = new ComboBox<>();
         towerSpots = new ArrayList<>();
-        towerMap = new HashMap<>(); // Initialiser la map
 
         setupComboBox();
         setupBackground();
@@ -98,17 +99,16 @@ public class GameScene {
         towerSpots.add(spotImageView);
     }
 
-    private void addTower(Rectangle spot, String towerType) {
+    private void addTower(double x, double y, String towerType) {
         Towers tower;
-        double x = spot.getX() + spot.getWidth() / 2;
-        double y = spot.getY() + spot.getHeight() / 2;
-
         switch (towerType) {
             case "ArrowTower":
                 tower = new ArrowTower(x - 95, y - 140);
+                gameController.addTower(tower);
                 break;
             case "KnightMan":
                 tower = new KnightMan(x - 95, y - 50);
+                gameController.addTower(tower);
                 break;
             default:
                 throw new IllegalArgumentException("Type de tour inconnu : " + towerType);

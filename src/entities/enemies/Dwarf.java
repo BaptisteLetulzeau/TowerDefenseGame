@@ -19,7 +19,7 @@ public class Dwarf extends Enemies {
     private List<Point2D> waypoints;
     private double speed = 2.5;
     private Image spriteSheet;
-    private static final int centerY = -80;
+    private static final int centerY = 360;
 
     public Dwarf(List<Point2D> waypoints) {
         super("assets/images/enemies/Dwarf.png", waypoints);
@@ -40,6 +40,8 @@ public class Dwarf extends Enemies {
         double newX = getLayoutX() + speed;
         setLayoutX(newX);
         setLayoutY(centerY);
+
+        notifyObservers();
         //System.out.println(getLayoutX());
     }
 

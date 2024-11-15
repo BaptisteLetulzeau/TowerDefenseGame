@@ -1,24 +1,21 @@
 package entities.towers;
 
-import entities.Entity;
 import entities.enemies.Enemies;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.geometry.Point2D;
 
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-
-import java.util.List;
-
-public abstract class Towers extends ImageView  {
+public abstract class Towers extends ImageView implements Observer  {
     protected double x;
     protected double y;
-    private AttackStrategy attackStrategy;
+    private double ATTACK_RANGE = 150;
+    private static final double ATTACK_DELAY = 1.0;
+    private long lastAttackTime = System.nanoTime();
 
-    public Towers(double x, double y, String imagePath) {
+    public Towers(double x, double y, String imagePath, double range) {
         this.x = x;
         this.y = y;
+        this.ATTACK_RANGE = range;
 
         setImage(new Image(imagePath));
 
@@ -29,13 +26,37 @@ public abstract class Towers extends ImageView  {
         setY(y);
     }
 
-    public void setAttackStrategy(AttackStrategy strategy) {
-        this.attackStrategy = strategy;
+    public Point2D getPosition() {
+        return new Point2D(x, y);
     }
 
-    public void performAttack(List<Enemies> enemies) {
-        if (attackStrategy != null) {
-            attackStrategy.attack(this, enemies);
+    public void updatePosition(Point2D enemyPosition) {
+        double distance = this.getPosition().distance(enemyPosition);
+
+        if (distance <= ATTACK_RANGE) {
+            long currentTime = System.nanoTime();
+            System.out.println("Enemy in range! Position: " + enemyPosition);
+
+            if ((currentTime - lastAttackTime) >= ATTACK_DELAY * 1_000_000_000) {
+                attack(enemyPosition);
+                lastAttackTime = currentTime;
+            }
         }
+    }
+
+    private void attack(Point2D enemyPosition) {
+        System.out.println("Tour attaque un ennemi à la position : " + enemyPosition);
+    }
+
+    public boolean isEnemyInRange(Enemies enemy) {
+        double dx = enemy.getLayoutX() - this.getX();
+        double dy = enemy.getLayoutY() - this.getY();
+        double distance = Math.sqrt(dx * dx + dy * dy);
+        return distance <= ATTACK_RANGE;
+    }
+
+    public void onEnemyInRange(Enemies enemy) {
+        // Code pour attaquer ou cibler l'ennemi
+        System.out.println("Ennemi dans la portée de la tour : " + enemy);
     }
 }
