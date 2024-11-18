@@ -94,6 +94,13 @@ public class GameController {
         scaleTransition.setToX(1.2);
         scaleTransition.setToY(1.2);
         scaleTransition.setAutoReverse(true);
+
+        // Réinitialiser la taille de la barre après l'animation
+        scaleTransition.setOnFinished(event -> {
+            healthBar.setScaleX(1.0);
+            healthBar.setScaleY(1.0);
+        });
+
         scaleTransition.play();
     }
 
@@ -181,7 +188,7 @@ public class GameController {
         }
 
         // Si tous les ennemis de la vague sont éliminés, lancer la prochaine vague
-        if (activeEnemies.isEmpty() && currentWaveIndex < waves.size()) {
+        if (activeEnemies.isEmpty() && currentWaveIndex < waves.size() && playerLives > 0) {
             startWave();
         }
     }
