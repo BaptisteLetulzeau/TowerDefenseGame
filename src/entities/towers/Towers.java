@@ -1,16 +1,18 @@
 package entities.towers;
 
+import controllers.GameController;
 import entities.enemies.Enemies;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.geometry.Point2D;
+import javafx.util.Duration;
 
 public abstract class Towers extends ImageView implements Observer  {
     protected double x;
     protected double y;
     private double ATTACK_RANGE = 150;
-    private static final double ATTACK_DELAY = 1.0;
-    private long lastAttackTime = System.nanoTime();
+    private Timeline shootingTimeline;
 
     public Towers(double x, double y, String imagePath, double range) {
         this.x = x;
@@ -26,26 +28,23 @@ public abstract class Towers extends ImageView implements Observer  {
         setY(y);
     }
 
-    public Point2D getPosition() {
-        return new Point2D(x, y);
-    }
-
-    public void updatePosition(Point2D enemyPosition) {
-        double distance = this.getPosition().distance(enemyPosition);
-
-        if (distance <= ATTACK_RANGE) {
-            long currentTime = System.nanoTime();
-            System.out.println("Enemy in range! Position: " + enemyPosition);
-
-            if ((currentTime - lastAttackTime) >= ATTACK_DELAY * 1_000_000_000) {
-                attack(enemyPosition);
-                lastAttackTime = currentTime;
+    public void startShooting(GameController gameController) {
+        shootingTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            for (Enemies enemy : gameController.getActiveEnemies()) {
+                if (isEnemyInRange(enemy)) {
+                    attackEnemyInRange(enemy);
+                    break;
+                }
             }
-        }
+        }));
+        shootingTimeline.setCycleCount(Timeline.INDEFINITE);
+        shootingTimeline.play();
     }
 
-    private void attack(Point2D enemyPosition) {
-        System.out.println("Tour attaque un ennemi à la position : " + enemyPosition);
+    public void stopShooting() {
+        if (shootingTimeline != null) {
+            shootingTimeline.stop();
+        }
     }
 
     public boolean isEnemyInRange(Enemies enemy) {
@@ -55,8 +54,17 @@ public abstract class Towers extends ImageView implements Observer  {
         return distance <= ATTACK_RANGE;
     }
 
-    public void onEnemyInRange(Enemies enemy) {
-        // Code pour attaquer ou cibler l'ennemi
-        System.out.println("Ennemi dans la portée de la tour : " + enemy);
+    public void attackEnemyInRange(Enemies enemy) {
+        System.out.println("L'Ennemi est dans la portée !");
+        enemy.reduceHealth(20);
+
+        // Déclenchement de l'animation pour ArrowTower, en passant l'ennemi pour déterminer la direction
+        if (this instanceof ArrowTower) {
+            ((ArrowTower) this).triggerAttackAnimation(enemy); // Passer l'ennemi pour déterminer la direction
+        }
+
+        if (enemy.isDead()) {
+            System.out.println("L'ennemi " + enemy + " est mort par une tour.");
+        }
     }
 }
