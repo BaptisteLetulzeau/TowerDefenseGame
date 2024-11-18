@@ -33,10 +33,6 @@ public abstract class Enemies extends ImageView implements Subject {
     public void addObserver(Observer observer) {
         if (!observers.contains(observer)) {
             observers.add(observer);
-            System.out.println("Observer ajouté : " + observer + " pour l'ennemi : " + this);
-        }
-        else {
-            System.out.println("Observer déjà enregistré : " + observer);
         }
     }
 

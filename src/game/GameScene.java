@@ -77,9 +77,9 @@ public class GameScene {
 
     private void setupTowerSpots() {
         addTowerSpot(150, 240, "ArrowTower");
-        addTowerSpot(330, 700, "ArrowTower");
+        addTowerSpot(330, 670, "ArrowTower");
         addTowerSpot(600, 220, "ArrowTower");
-        addTowerSpot(950, 660, "ArrowTower");
+        addTowerSpot(950, 640, "ArrowTower");
         addTowerSpot(1200, 220, "ArrowTower");
     }
 
@@ -100,6 +100,11 @@ public class GameScene {
     }
 
     private void addTower(double x, double y, String towerType) {
+        if (!gameController.canPurchase(towerType)) {
+            System.out.println("Pas assez d'argent pour acheter " + towerType + " !");
+            return;
+        }
+
         Towers tower;
         switch (towerType) {
             case "ArrowTower":
@@ -116,7 +121,9 @@ public class GameScene {
 
         gamePane.getChildren().add(tower);
 
-        // On lance le mécanisme de tir
+        int towerCost = gameController.getTowerCost(towerType);
+        gameController.deductMoney(towerCost);
+
         tower.startShooting(gameController);
 
         System.out.println(towerType + " placé à : " + x + ", " + y);

@@ -17,11 +17,13 @@ public class Dwarf extends Enemies {
     private int currentFrame = 0;
     private Timeline animation;
     private List<Point2D> waypoints;
-    private double speed = 5;
+    private double speed = 4.5;
     private Image spriteSheet;
     private static final int centerY = 360;
+    private double startX;
+    private double startY;
 
-    public Dwarf(List<Point2D> waypoints) {
+    public Dwarf(List<Point2D> waypoints, double startX, double startY) {
         super("assets/images/enemies/Dwarf.png", waypoints);
         this.waypoints = waypoints;
         this.spriteSheet = new Image(getClass().getResource("/assets/images/enemies/Dwarf.png").toExternalForm());
@@ -30,6 +32,11 @@ public class Dwarf extends Enemies {
         setFitWidth(FRAME_WIDTH);
         setFitHeight(FRAME_HEIGHT);
         setViewport(new Rectangle2D(0, FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT));
+
+        this.startX = startX;
+        this.startY = startY;
+        setLayoutX(startX);
+        setLayoutY(startY);
     }
 
     private void move() {
@@ -39,7 +46,7 @@ public class Dwarf extends Enemies {
 
         double newX = getLayoutX() + speed;
         setLayoutX(newX);
-        setLayoutY(centerY);
+        setLayoutY(startY);
         //System.out.println(getLayoutX());
     }
 
