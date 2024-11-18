@@ -7,49 +7,18 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class ArrowTower extends Towers {
 
-    private static final int FRAME_WIDTH = 192;
-    private static final int FRAME_HEIGHT = 190;
-    private static final int COLUMNS = 8;
-    private static final int IDLE_FRAMES = 5;
-    private static final int ROWS_START_ATTACK = 3;
-
-    private static ArrowTower uniqueTower = null;  // Seule tour autorisée
-    private static final Set<Point2D> occupiedPositions = new HashSet<>(); // Positions occupées
+    private static final int FRAME_WIDTH = 192;   // Largeur d'une frame
+    private static final int FRAME_HEIGHT = 190;  // Hauteur d'une frame
+    private static final int IDLE_FRAMES = 6;    // Nombre de frames pour "idle" (6 premières colonnes)
+    private static final int COLUMNS = 8;        // Nombre de colonnes dans le sprite sheet
+    private static final int TOTAL_ATTACK_ROWS = 7; // Nombre de lignes pour l'attaque
 
     private Timeline animation;
     private int currentFrame = 0;
     private boolean isAttacking = false;
     private int currentAttackRow = 0; // Ligne active pour l'attaque
-
-    private static final double POSITION_TOLERANCE = 10.0; // Tolérance pour les coordonnées de position
-
-    // Méthode de création de la tour avec gestion de la duplication
-    public static ArrowTower createArrowTower(double x, double y) {
-        if (uniqueTower != null) {
-            System.out.println("Une seule tour peut être créée. Impossible d'en créer une autre.");
-            return null; // Retourne null si la tour existe déjà
-        }
-
-        // Crée la tour si elle n'existe pas encore
-        uniqueTower = new ArrowTower(x, y);
-        return uniqueTower;
-    }
-
-    // Vérifie si la position est occupée en tenant compte de la tolérance
-    private static boolean isPositionOccupied(Point2D position) {
-        for (Point2D occupiedPosition : occupiedPositions) {
-            if (Math.abs(position.getX() - occupiedPosition.getX()) < POSITION_TOLERANCE &&
-                    Math.abs(position.getY() - occupiedPosition.getY()) < POSITION_TOLERANCE) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public ArrowTower(double x, double y) {
         super(x, y, "/assets/images/towers/Archer.png", 250);
@@ -61,14 +30,11 @@ public class ArrowTower extends Towers {
         setFitHeight(FRAME_HEIGHT);
 
         setViewport(new Rectangle2D(0, 0, FRAME_WIDTH, FRAME_HEIGHT));
-
         startAnimation();
     }
 
     private void startAnimation() {
-        animation = new Timeline(new KeyFrame(Duration.millis(100), event -> {
-            updateFrame();
-        }));
+        animation = new Timeline(new KeyFrame(Duration.millis(100), event -> updateFrame()));
         animation.setCycleCount(Timeline.INDEFINITE);
         animation.play();
     }
@@ -77,9 +43,9 @@ public class ArrowTower extends Towers {
         int col, row;
 
         if (isAttacking) {
-            // Animation pour l'attaque : Utilise 8 colonnes et 7 lignes
-            col = currentFrame % COLUMNS;  // Calcul de la colonne
-            row = currentAttackRow;        // L'attaque utilise la ligne d'animation calculée
+            // Gestion de l'animation d'attaque
+            col = currentFrame % COLUMNS;  // Colonne actuelle
+            row = currentAttackRow;        // Ligne correspondant à la direction de l'attaque
 
             setViewport(new Rectangle2D(
                     col * FRAME_WIDTH,
@@ -90,15 +56,15 @@ public class ArrowTower extends Towers {
 
             currentFrame++;
 
-            // Vérifier si l'animation est terminée
-            if (currentFrame >= COLUMNS) { // Fin de l'animation d'attaque
-                isAttacking = false;  // Revenir à l'état d'attente
-                currentFrame = 0;  // Réinitialiser la frame d'animation
+            // Fin de l'animation d'attaque
+            if (currentFrame >= COLUMNS) {
+                isAttacking = false;  // Retour à l'état "idle"
+                currentFrame = 0;
             }
         } else {
-            // Animation pour l'attente : Utilise 6 colonnes et une seule ligne (ligne 0)
-            col = currentFrame % IDLE_FRAMES;  // Calcul de la colonne
-            row = 0;  // Toujours utiliser la ligne 0 pour l'état "idle"
+            // Gestion de l'animation "idle" (6 premières colonnes de la ligne 0)
+            col = currentFrame % IDLE_FRAMES;  // Reste dans les 6 premières colonnes
+            row = 0;  // Ligne 0 pour "idle"
 
             setViewport(new Rectangle2D(
                     col * FRAME_WIDTH,
@@ -107,13 +73,10 @@ public class ArrowTower extends Towers {
                     FRAME_HEIGHT
             ));
 
-            // Mise à jour de l'index de la frame pour l'animation "idle"
             currentFrame = (currentFrame + 1) % IDLE_FRAMES;
         }
     }
 
-
-    // Déclenche l'animation d'attaque
     public void triggerAttackAnimation(Enemies enemy) {
         if (!isAttacking) {
             isAttacking = true;
@@ -124,27 +87,26 @@ public class ArrowTower extends Towers {
             double dy = enemy.getLayoutY() - this.getY();
             double angle = Math.toDegrees(Math.atan2(dy, dx));
 
-            // Mapper l'angle à une ligne d'animation
+            // Déterminer la ligne d'attaque en fonction de l'angle
             currentAttackRow = determineAttackRow(angle);
         }
     }
 
     private int determineAttackRow(double angle) {
-        // Déterminer la ligne en fonction de l'angle
         if (angle >= -22.5 && angle <= 22.5) {
-            return 5; // Droite
+            return 3; // Droite
         } else if (angle > 22.5 && angle <= 67.5) {
             return 4; // Diagonale bas-droite
         } else if (angle > 67.5 && angle <= 112.5) {
-            return 7; // Bas
+            return 5; // Bas
         } else if (angle > 112.5 && angle <= 157.5) {
             return 6; // Diagonale bas-gauche
         } else if (angle >= -67.5 && angle < -22.5) {
-            return 3; // Diagonale haut-droite
+            return 2; // Diagonale haut-droite
         } else if (angle >= -112.5 && angle < -67.5) {
-            return 3; // Haut
+            return 1; // Haut
         } else {
-            return 3;
+            return 7; // Diagonale haut-gauche
         }
     }
 }
