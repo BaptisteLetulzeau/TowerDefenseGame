@@ -16,7 +16,7 @@ public class Troll extends Enemies {
     private int currentFrame = 0;
     private Timeline animation;
     private List<Point2D> waypoints;
-    private double speed = 2.5;
+    private double speed = 3;
     private Image spriteSheet;
     private static final int centerY = 300;
 

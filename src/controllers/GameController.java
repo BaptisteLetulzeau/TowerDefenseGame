@@ -11,6 +11,7 @@ import javafx.animation.ScaleTransition;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -32,6 +33,10 @@ public class GameController {
     private Text gameOverText;
     private Timeline waveTimeline;
     private final List<Towers> activeTowers = new ArrayList<>();
+    private int playerLives = 3;
+    private Rectangle healthBarBackground;
+    private Rectangle healthBar;
+    private Text healthText;
 
     public GameController(Pane gamePane) {
         this.gamePane = gamePane;
@@ -40,16 +45,77 @@ public class GameController {
 
         this.waves = createWaves();
 
+        setupHealthBar();
         setupGameOverText();
 
         startWave();
+    }
+
+    private void setupHealthBar() {
+        healthText = new Text("Health Life:");
+        healthText.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+        healthText.setFill(Color.WHITE);
+        healthText.setX(20);
+        healthText.setY(15);
+
+        healthBarBackground = new Rectangle(200, 20, Color.DARKGRAY);
+        healthBarBackground.setX(20);
+        healthBarBackground.setY(20);
+
+        healthBar = new Rectangle(200, 20, Color.LIMEGREEN);
+        healthBar.setX(20);
+        healthBar.setY(20);
+
+        gamePane.getChildren().addAll(healthBarBackground, healthBar, healthText);
+    }
+
+    private void updateHealthBar() {
+        double maxLives = 3;
+        double barWidth = healthBarBackground.getWidth();
+        double newWidth = (playerLives / maxLives) * barWidth;
+
+        healthBar.setWidth(newWidth);
+
+        if (playerLives == 2) {
+            healthBar.setFill(Color.ORANGE);
+        }
+        else if (playerLives == 1) {
+            healthBar.setFill(Color.RED);
+        }
+
+        animateHealthBar();
+        animateScreenShake();
+    }
+
+    private void animateHealthBar() {
+        ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.3), healthBar);
+        scaleTransition.setFromX(1.0);
+        scaleTransition.setFromY(1.0);
+        scaleTransition.setToX(1.2);
+        scaleTransition.setToY(1.2);
+        scaleTransition.setAutoReverse(true);
+        scaleTransition.play();
+    }
+
+    private void animateScreenShake() {
+        double amplitude = 10;
+        Duration duration = Duration.millis(50);
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(duration, e -> gamePane.setTranslateX(amplitude)),
+                new KeyFrame(duration.multiply(2), e -> gamePane.setTranslateX(-amplitude)),
+                new KeyFrame(duration.multiply(3), e -> gamePane.setTranslateX(amplitude / 2)),
+                new KeyFrame(duration.multiply(4), e -> gamePane.setTranslateX(0))
+        );
+        timeline.setCycleCount(1);
+        timeline.play();
     }
 
     private List<List<Enemies>> createWaves() {
         List<List<Enemies>> waves = new ArrayList<>();
 
         List<Enemies> wave1 = new ArrayList<>(List.of(new Gnom(path.getWaypoints()), new Troll(path.getWaypoints()), new Dwarf(path.getWaypoints())));
-        List<Enemies> wave2 = new ArrayList<>(List.of(new Troll(path.getWaypoints()), new Troll(path.getWaypoints()), new Dwarf(path.getWaypoints()), new Dwarf(path.getWaypoints())));
+        List<Enemies> wave2 = new ArrayList<>(List.of(new Dwarf(path.getWaypoints()), new Gnom(path.getWaypoints()), new Troll(path.getWaypoints()), new Dwarf(path.getWaypoints())));
         List<Enemies> wave3 = new ArrayList<>(List.of(new Dwarf(path.getWaypoints()), new Dwarf(path.getWaypoints()), new Gnom(path.getWaypoints()), new Dwarf(path.getWaypoints()), new Dwarf(path.getWaypoints())));
 
         waves.add(wave1);
@@ -95,8 +161,17 @@ public class GameController {
             enemy.update();
 
             if (enemy.hasReachedFinalWaypoint()) {
-                showGameOver();
-                return;
+                playerLives--;
+                updateHealthBar();
+                System.out.println("Un ennemi a atteint la fin ! Points de vie restants : " + playerLives);
+
+                iterator.remove();
+                gamePane.getChildren().remove(enemy);
+
+                if (playerLives <= 0) {
+                    showGameOver();
+                    return;
+                }
             }
 
             if (enemy.isDefeated()) {
