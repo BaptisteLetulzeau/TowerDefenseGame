@@ -32,11 +32,16 @@ public abstract class Towers extends ImageView implements Observer  {
 
     public void startShootingArrow(GameController gameController) {
         shootingTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
-            for (Enemies enemy : gameController.getActiveEnemies()) {
-                if (isEnemyInRange(enemy)) {
-                    attackEnemyInRange(enemy);
-                    break;
-                }
+//            for (Enemies enemy : gameController.getActiveEnemies()) {
+//                if (isEnemyInRange(enemy)) {
+//                    attackEnemyInRange(enemy);
+//                    break;
+//                }
+//            }
+            Enemies weakestEnemy = findWeakestEnemyInRange(gameController);
+            System.out.println(weakestEnemy);
+            if (weakestEnemy != null) {
+                attackEnemyInRange(weakestEnemy);
             }
         }));
         shootingTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -45,15 +50,48 @@ public abstract class Towers extends ImageView implements Observer  {
 
     public void startShootingKnight(GameController gameController) {
         shootingTimeline = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
-            for (Enemies enemy : gameController.getActiveEnemies()) {
-                if (isEnemyInRange(enemy)) {
-                    attackEnemyInRange(enemy);
-                    break;
-                }
+//            for (Enemies enemy : gameController.getActiveEnemies()) {
+//                if (isEnemyInRange(enemy)) {
+//                    attackEnemyInRange(enemy);
+//                    break;
+//                }
+//            }
+            Enemies strongestEnemy = findStrongestEnemyInRange(gameController);
+            System.out.println(strongestEnemy);
+            if (strongestEnemy != null) {
+                attackEnemyInRange(strongestEnemy);
             }
         }));
         shootingTimeline.setCycleCount(Timeline.INDEFINITE);
         shootingTimeline.play();
+    }
+
+    public Enemies findWeakestEnemyInRange(GameController gameController) {
+        Enemies weakestEnemy = null;
+        double lowestHealth = Double.MAX_VALUE;
+
+        for (Enemies enemy : gameController.getActiveEnemies()) {
+            if (isEnemyInRange(enemy) && enemy.getHealth() < lowestHealth) {
+                lowestHealth = enemy.getHealth();
+                weakestEnemy = enemy;
+            }
+        }
+
+        return weakestEnemy;
+    }
+
+    public Enemies findStrongestEnemyInRange(GameController gameController) {
+        Enemies strongestEnemy = null;
+        double highestHealth = Double.MIN_VALUE;
+
+        for (Enemies enemy : gameController.getActiveEnemies()) {
+            if (isEnemyInRange(enemy) && enemy.getHealth() > highestHealth) {
+                highestHealth = enemy.getHealth();
+                strongestEnemy = enemy;
+            }
+        }
+
+        return strongestEnemy;
     }
 
     public boolean isEnemyInRange(Enemies enemy) {
