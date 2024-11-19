@@ -11,8 +11,6 @@ public class ArrowTower extends Towers {
 
     private static final int FRAME_WIDTH = 192;
     private static final int FRAME_HEIGHT = 190;
-    private static final int COLUMNS = 8;
-    private static final int ROWS = 7;
     private static ArrowTower uniqueTower = null;
     private Timeline animation;
     private int currentFrame = 0;
