@@ -59,6 +59,10 @@ public abstract class Enemies extends ImageView implements Subject {
         return this.health <= 0;
     }
 
+    public int getHealth() {
+        return health;
+    }
+
     public boolean isDefeated() {
         return this.health <= 0;
     }
