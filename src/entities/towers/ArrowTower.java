@@ -10,7 +10,6 @@ public class ArrowTower extends Towers {
 
     private static final int FRAME_WIDTH = 192;
     private static final int FRAME_HEIGHT = 190;
-    private static ArrowTower uniqueTower = null;
     private static final int IDLE_FRAMES = 6;
     private static final int COLUMNS = 8;
     private static final int TOTAL_ATTACK_ROWS = 7;
@@ -27,7 +26,7 @@ public class ArrowTower extends Towers {
         setFitWidth(FRAME_WIDTH);
         setFitHeight(FRAME_HEIGHT);
 
-        /* Affichage de la première frame de la ligne "idle" par défaut */
+        //Affichage de la première frame de la ligne "idle" par défaut
         setViewport(new Rectangle2D(0, 0, FRAME_WIDTH, FRAME_HEIGHT));
         startAnimation();
     }
@@ -48,11 +47,11 @@ public class ArrowTower extends Towers {
         int col, row;
 
         if (isAttacking) {
-            /* Animation d'attaque */
+            //Animation d'attaque
             col = currentFrame % COLUMNS;
             row = currentAttackRow;
 
-            /* Vérification de la ligne d'attaque si elle est valide */
+            //Vérification de la ligne d'attaque si elle est valide
             if (row >= 0 && row < TOTAL_ATTACK_ROWS) {
                 setViewport(new Rectangle2D(
                         col * FRAME_WIDTH,
@@ -60,7 +59,8 @@ public class ArrowTower extends Towers {
                         FRAME_WIDTH,
                         FRAME_HEIGHT
                 ));
-            } else {
+            }
+            else {
                 System.err.println("Erreur : Ligne d'attaque invalide : " + row);
                 isAttacking = false;
                 return;
@@ -68,13 +68,14 @@ public class ArrowTower extends Towers {
 
             currentFrame++;
 
-            /* Fin de l'animation d'attaque */
+            //Fin de l'animation d'attaque
             if (currentFrame >= COLUMNS) {
                 isAttacking = false;
                 currentFrame = 0;
             }
-        } else {
-            /* Animation "idle" (6 premières colonnes de la ligne 0) */
+        }
+        else {
+            //Animation "idle" (6 premières colonnes de la ligne 0)
             col = currentFrame % IDLE_FRAMES;
             row = 0;
 
@@ -97,12 +98,12 @@ public class ArrowTower extends Towers {
             isAttacking = true;
             currentFrame = 0;
 
-            /* Calcul de la direction de l'ennemi */
+            //Calcul de la direction de l'ennemi
             double dx = enemy.getLayoutX() - this.getX();
             double dy = enemy.getLayoutY() - this.getY();
             double angle = Math.toDegrees(Math.atan2(dy, dx));
 
-            /* Déterminer la ligne d'attaque en fonction de l'angle */
+           //Déterminer la ligne d'attaque en fonction de l'angle
             currentAttackRow = determineAttackRow(angle);
 
             System.out.println("Angle : " + angle + ", Ligne d'attaque : " + currentAttackRow);
@@ -113,23 +114,28 @@ public class ArrowTower extends Towers {
      * Détermine la ligne à utiliser pour l'animation d'attaque en fonction de l'angle.
      */
     private int determineAttackRow(double angle) {
-        /* Détermine la ligne correspondante dans la sprite en fonction de l'angle */
         if (angle >= -22.5 && angle <= 22.5) {
             return 3;
         }
         else if (angle > 22.5 && angle <= 67.5) {
             return 4;
-        } else if (angle > 67.5 && angle <= 112.5) {
+        }
+        else if (angle > 67.5 && angle <= 112.5) {
             return 5;
-        } else if (angle > 112.5 && angle <= 157.5) {
+        }
+        else if (angle > 112.5 && angle <= 157.5) {
             return 6;
-        } else if (angle >= -67.5 && angle < -22.5) {
+        }
+        else if (angle >= -67.5 && angle < -22.5) {
             return 2;
-        } else if (angle >= -112.5 && angle < -67.5) {
+        }
+        else if (angle >= -112.5 && angle < -67.5) {
             return 3;
-        } else if (angle >= -157.5 && angle < -112.5) {
+        }
+        else if (angle >= -157.5 && angle < -112.5) {
             return 2;
-        } else {
+        }
+        else {
             System.err.println("Erreur : Angle invalide détecté (" + angle + ")");
             return 0;
         }
