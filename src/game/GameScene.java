@@ -1,26 +1,24 @@
 package game;
 
 import controllers.GameController;
-import entities.enemies.Enemies;
 import entities.towers.ArrowTower;
 import entities.towers.KnightMan;
 import entities.towers.Towers;
-import javafx.scene.Scene;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.paint.Color;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GameScene {
 
@@ -30,18 +28,20 @@ public class GameScene {
     private final List<ImageView> towerSpots;
     private final GameController gameController;
     private Timeline gameLoop;
+    private MediaPlayer mediaPlayer;
     private final Image towerSpotImage = new Image("/assets/images/towers/Tower_Purple.png");
 
     public GameScene() {
         gamePane = new Pane();
         towerTypeComboBox = new ComboBox<>();
         towerSpots = new ArrayList<>();
+        rootLayout = new VBox(10, towerTypeComboBox, gamePane);
 
+        setupBackgroundMusic();
         setupComboBox();
         setupBackground();
         setupTowerSpots();
 
-        rootLayout = new VBox(towerTypeComboBox, gamePane);
         gameController = new GameController(gamePane);
 
         setupGameLoop();
@@ -53,6 +53,21 @@ public class GameScene {
         }));
         gameLoop.setCycleCount(Timeline.INDEFINITE);
         gameLoop.play();
+    }
+
+    private void setupBackgroundMusic() {
+        String musicFilePath = getClass().getResource("/assets/sounds/music.mp3").toExternalForm();
+        Media backgroundMusic = new Media(musicFilePath);
+        mediaPlayer = new MediaPlayer(backgroundMusic);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.setVolume(0.5);
+        mediaPlayer.play();
+    }
+
+    public void showSettingsMenu() {
+        Scene mainScene = rootLayout.getScene();
+        SettingsMenu settingsMenu = new SettingsMenu(mainScene, mediaPlayer);
+        settingsMenu.display();
     }
 
     public VBox getRootLayout() {
@@ -69,7 +84,7 @@ public class GameScene {
 
         ImageView backgroundImageView = new ImageView(backgroundImage);
 
-        backgroundImageView.setFitWidth(1400);
+        backgroundImageView.setFitWidth(1300);
         backgroundImageView.setFitHeight(1000);
 
         gamePane.getChildren().addFirst(backgroundImageView);

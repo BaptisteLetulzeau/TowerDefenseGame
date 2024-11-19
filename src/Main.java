@@ -1,7 +1,7 @@
-import controllers.GameController;
 import game.GameScene;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -9,12 +9,17 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         GameScene gameScene = new GameScene();
 
-        Scene scene = new Scene(gameScene.getRootLayout(), 1300, 1000);
+        Scene mainScene = new Scene(gameScene.getRootLayout(), 1300, 1000);
 
-        primaryStage.setTitle("Mon Jeu de Tower Defense");
+        Button settingsButton = new Button("Settings");
+        settingsButton.setOnAction(e -> {
+            gameScene.showSettingsMenu();
+        });
 
-        primaryStage.setScene(scene);
+        gameScene.getRootLayout().getChildren().add(settingsButton);
 
+        primaryStage.setTitle("Tower Defense");
+        primaryStage.setScene(mainScene);
         primaryStage.show();
     }
 
