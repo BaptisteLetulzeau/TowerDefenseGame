@@ -29,7 +29,7 @@ public abstract class Towers extends ImageView implements Observer  {
         setX(x);
         setY(y);
     }
-
+    
     public void startShootingArrow(GameController gameController) {
         shootingTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
 //            for (Enemies enemy : gameController.getActiveEnemies()) {
