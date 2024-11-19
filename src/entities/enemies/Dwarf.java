@@ -17,14 +17,14 @@ public class Dwarf extends Enemies {
     private int currentFrame = 0;
     private Timeline animation;
     private List<Point2D> waypoints;
-    private double speed = 4.5;
+    private double speed = 5.5;
     private Image spriteSheet;
-    private static final int centerY = 360;
     private double startX;
     private double startY;
+    private int currentWaypointIndex = 0;
 
     public Dwarf(List<Point2D> waypoints, double startX, double startY) {
-        super("assets/images/enemies/Dwarf.png", waypoints);
+        super("assets/images/enemies/Dwarf.png", waypoints, 80);
         this.waypoints = waypoints;
         this.spriteSheet = new Image(getClass().getResource("/assets/images/enemies/Dwarf.png").toExternalForm());
 
@@ -44,10 +44,29 @@ public class Dwarf extends Enemies {
             return;
         }
 
-        double newX = getLayoutX() + speed;
-        setLayoutX(newX);
-        setLayoutY(startY);
-        //System.out.println(getLayoutX());
+        Point2D currentWaypoint = waypoints.get(currentWaypointIndex);
+        double targetX = currentWaypoint.getX();
+        double targetY = currentWaypoint.getY();
+
+        double deltaX = targetX - getLayoutX();
+        double deltaY = targetY - getLayoutY();
+        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+        if (distance < speed) {
+            currentWaypointIndex++;
+            if (currentWaypointIndex >= waypoints.size()) {
+                return;
+            }
+            currentWaypoint = waypoints.get(currentWaypointIndex);
+            targetX = currentWaypoint.getX();
+            targetY = currentWaypoint.getY();
+        }
+
+        double directionX = deltaX / distance;
+        double directionY = deltaY / distance;
+
+        setLayoutX(getLayoutX() + directionX * speed);
+        setLayoutY(getLayoutY() + directionY * speed);
     }
 
     @Override
@@ -57,8 +76,7 @@ public class Dwarf extends Enemies {
     }
 
     public boolean hasReachedFinalWaypoint() {
-        double finalWaypointX = waypoints.getLast().getX();
-        return getLayoutX() >= finalWaypointX;
+        return currentWaypointIndex >= waypoints.size();
     }
 
     private void updateFrame() {

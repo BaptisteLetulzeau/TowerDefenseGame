@@ -65,7 +65,7 @@ public class GameScene {
     }
 
     private void setupBackground() {
-        Image backgroundImage = new Image("/assets/images/background/background.png");
+        Image backgroundImage = new Image("/assets/images/background/background2.png");
 
         ImageView backgroundImageView = new ImageView(backgroundImage);
 
@@ -76,11 +76,10 @@ public class GameScene {
     }
 
     private void setupTowerSpots() {
-        addTowerSpot(150, 240, "ArrowTower");
+        addTowerSpot(110, 350, "ArrowTower");
         addTowerSpot(330, 670, "ArrowTower");
-        addTowerSpot(600, 220, "ArrowTower");
-        addTowerSpot(950, 640, "ArrowTower");
-        addTowerSpot(1200, 220, "ArrowTower");
+        addTowerSpot(700, 520, "ArrowTower");
+        addTowerSpot(1200, 300, "ArrowTower");
     }
 
     private void addTowerSpot(double x, double y, String defaultTowerType) {
@@ -124,7 +123,12 @@ public class GameScene {
         int towerCost = gameController.getTowerCost(towerType);
         gameController.deductMoney(towerCost);
 
-        tower.startShooting(gameController);
+        if (towerType.equals("ArrowTower")) {
+            tower.startShootingArrow(gameController);
+        }
+        else {
+            tower.startShootingKnight(gameController);
+        }
 
         System.out.println(towerType + " placé à : " + x + ", " + y);
     }

@@ -26,7 +26,7 @@ public class KnightMan extends Towers implements Observer {
     }
 
     public KnightMan(double x, double y) {
-        super(x, y, "/assets/images/towers/Warrior.png", 1000);
+        super(x, y, "/assets/images/towers/Warrior.png", 50, 25);
 
         setX(x);
         setY(y);

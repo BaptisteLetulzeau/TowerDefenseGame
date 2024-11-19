@@ -11,13 +11,15 @@ import javafx.util.Duration;
 public abstract class Towers extends ImageView implements Observer  {
     protected double x;
     protected double y;
-    private double ATTACK_RANGE = 150;
+    private final double ATTACK_RANGE;
+    private final int POWER;
     private Timeline shootingTimeline;
 
-    public Towers(double x, double y, String imagePath, double range) {
+    public Towers(double x, double y, String imagePath, double range, int power) {
         this.x = x;
         this.y = y;
         this.ATTACK_RANGE = range;
+        this.POWER = power;
 
         setImage(new Image(imagePath));
 
@@ -28,7 +30,7 @@ public abstract class Towers extends ImageView implements Observer  {
         setY(y);
     }
 
-    public void startShooting(GameController gameController) {
+    public void startShootingArrow(GameController gameController) {
         shootingTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
             for (Enemies enemy : gameController.getActiveEnemies()) {
                 if (isEnemyInRange(enemy)) {
@@ -41,10 +43,17 @@ public abstract class Towers extends ImageView implements Observer  {
         shootingTimeline.play();
     }
 
-    public void stopShooting() {
-        if (shootingTimeline != null) {
-            shootingTimeline.stop();
-        }
+    public void startShootingKnight(GameController gameController) {
+        shootingTimeline = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
+            for (Enemies enemy : gameController.getActiveEnemies()) {
+                if (isEnemyInRange(enemy)) {
+                    attackEnemyInRange(enemy);
+                    break;
+                }
+            }
+        }));
+        shootingTimeline.setCycleCount(Timeline.INDEFINITE);
+        shootingTimeline.play();
     }
 
     public boolean isEnemyInRange(Enemies enemy) {
@@ -56,7 +65,7 @@ public abstract class Towers extends ImageView implements Observer  {
 
     public void attackEnemyInRange(Enemies enemy) {
         System.out.println("L'Ennemi est dans la portée !");
-        enemy.reduceHealth(20);
+        enemy.reduceHealth(POWER);
 
         if (enemy.isDead()) {
             System.out.println("L'ennemi " + enemy + " est mort par une tour.");

@@ -28,7 +28,7 @@ public class ArrowTower extends Towers {
     }
 
     public ArrowTower(double x, double y) {
-        super(x, y, "/assets/images/towers/Archer.png", 250);
+        super(x, y, "/assets/images/towers/Archer.png", 250, 15);
 
         setX(x);
         setY(y);

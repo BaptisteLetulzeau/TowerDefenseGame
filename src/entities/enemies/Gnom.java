@@ -15,14 +15,15 @@ public class Gnom extends Enemies {
     private static final int COLUMNS = 10;
     private static final int FRAMES_IN_SECOND_LINE = 6;
     private int currentFrame = 0;
-    private Timeline animation;
     private List<Point2D> waypoints;
-    private double speed = 4;
+    private double speed = 4.5;
     private Image spriteSheet;
-    private static final int centerY = 240;
+    private double startX;
+    private double startY;
+    private int currentWaypointIndex = 0;
 
-    public Gnom(List<Point2D> waypoints) {
-        super("assets/images/enemies/Gnom.png", waypoints);
+    public Gnom(List<Point2D> waypoints, double startX, double startY) {
+        super("assets/images/enemies/Gnom.png", waypoints, 120);
         this.waypoints = waypoints;
         this.spriteSheet = new Image(getClass().getResource("/assets/images/enemies/Gnom.png").toExternalForm());
 
@@ -30,6 +31,11 @@ public class Gnom extends Enemies {
         setFitWidth(FRAME_WIDTH);
         setFitHeight(FRAME_HEIGHT);
         setViewport(new Rectangle2D(0, FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT));
+
+        this.startX = startX;
+        this.startY = startY;
+        setLayoutX(startX);
+        setLayoutY(startY);
     }
 
     private void move() {
@@ -37,10 +43,29 @@ public class Gnom extends Enemies {
             return;
         }
 
-        double newX = getLayoutX() + speed;
-        setLayoutX(newX);
-        setLayoutY(centerY);
-        //System.out.println(getLayoutX());
+        Point2D currentWaypoint = waypoints.get(currentWaypointIndex);
+        double targetX = currentWaypoint.getX();
+        double targetY = currentWaypoint.getY();
+
+        double deltaX = targetX - getLayoutX();
+        double deltaY = targetY - getLayoutY();
+        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+        if (distance < speed) {
+            currentWaypointIndex++;
+            if (currentWaypointIndex >= waypoints.size()) {
+                return;
+            }
+            currentWaypoint = waypoints.get(currentWaypointIndex);
+            targetX = currentWaypoint.getX();
+            targetY = currentWaypoint.getY();
+        }
+
+        double directionX = deltaX / distance;
+        double directionY = deltaY / distance;
+
+        setLayoutX(getLayoutX() + directionX * speed);
+        setLayoutY(getLayoutY() + directionY * speed);
     }
 
     @Override
@@ -50,8 +75,7 @@ public class Gnom extends Enemies {
     }
 
     public boolean hasReachedFinalWaypoint() {
-        double finalWaypointX = waypoints.getLast().getX();
-        return getLayoutX() >= finalWaypointX;
+        return currentWaypointIndex >= waypoints.size();
     }
 
     private void updateFrame() {

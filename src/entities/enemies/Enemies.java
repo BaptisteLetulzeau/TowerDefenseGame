@@ -15,9 +15,9 @@ public abstract class Enemies extends ImageView implements Subject {
     protected List<Point2D> waypoints;
     private int health;
 
-    public Enemies(String imagePath, List<Point2D> waypoints) {
+    public Enemies(String imagePath, List<Point2D> waypoints, int health) {
         this.waypoints = waypoints;
-        this.health = 100;
+        this.health = health;
 
         if (waypoints.isEmpty()){
             waypoints.add(new Point2D(-100, 500));

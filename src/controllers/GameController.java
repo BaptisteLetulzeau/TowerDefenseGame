@@ -157,9 +157,10 @@ public class GameController {
     private List<List<Enemies>> createWaves() {
         List<List<Enemies>> waves = new ArrayList<>();
 
-        List<Enemies> wave1 = new ArrayList<>(List.of(new Gnom(path.getWaypoints()), new Troll(path.getWaypoints())));
-        List<Enemies> wave2 = new ArrayList<>(List.of(new Dwarf(path.getWaypoints(), -100, 420), new Gnom(path.getWaypoints()), new Troll(path.getWaypoints())));
-        List<Enemies> wave3 = new ArrayList<>(List.of(new Gnom(path.getWaypoints()), new Troll(path.getWaypoints()), new Dwarf(path.getWaypoints(), -100, 420), new Dwarf(path.getWaypoints(), -80, 420)));
+        List<Enemies> wave1 = new ArrayList<>(List.of(new Gnom(path.getWaypoints(), -149, 420), new Troll(path.getWaypoints(), -149, 420)));
+        List<Enemies> wave2 = new ArrayList<>(List.of(new Dwarf(path.getWaypoints(), -149, 420), new Gnom(path.getWaypoints(), -149, 420), new Troll(path.getWaypoints(), -149, 420)));
+        List<Enemies> wave3 = new ArrayList<>(List.of(new Dwarf(path.getWaypoints(), -149, 420), new Gnom(path.getWaypoints(), -149, 420), new Troll(path.getWaypoints(), -149, 420), new Dwarf(path.getWaypoints(), -149, 420)));
+        List<Enemies> wave4 = new ArrayList<>(List.of(new Dwarf(path.getWaypoints(), -149, 420), new Gnom(path.getWaypoints(), -149, 420), new Dwarf(path.getWaypoints(), -149, 420), new Troll(path.getWaypoints(), -149, 420), new Dwarf(path.getWaypoints(), -149, 420), new Gnom(path.getWaypoints(), -149, 420), new Troll(path.getWaypoints(), -149, 420)));
 
         waves.add(wave1);
         waves.add(wave2);
@@ -238,7 +239,7 @@ public class GameController {
                 iterator.remove();
                 gamePane.getChildren().remove(enemy);
 
-                money += 30;
+                money += 25;
                 updateMoney();
             }
         }
