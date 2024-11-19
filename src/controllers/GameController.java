@@ -165,6 +165,7 @@ public class GameController {
         waves.add(wave1);
         waves.add(wave2);
         waves.add(wave3);
+        waves.add(wave4);
 
         return waves;
     }
