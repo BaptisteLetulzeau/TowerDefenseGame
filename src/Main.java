@@ -9,7 +9,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         GameScene gameScene = new GameScene();
 
-        Scene scene = new Scene(gameScene.getRootLayout(), 1400, 1000);
+        Scene scene = new Scene(gameScene.getRootLayout(), 1300, 1000);
 
         primaryStage.setTitle("Mon Jeu de Tower Defense");
 
