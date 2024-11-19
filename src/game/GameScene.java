@@ -65,7 +65,7 @@ public class GameScene {
     }
 
     private void setupBackground() {
-        Image backgroundImage = new Image("/assets/images/background/background2.png");
+        Image backgroundImage = new Image("/assets/images/background/background.png");
 
         ImageView backgroundImageView = new ImageView(backgroundImage);
 
