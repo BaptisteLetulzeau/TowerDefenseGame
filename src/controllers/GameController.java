@@ -65,7 +65,7 @@ public class GameController {
     }
 
     private void applyThemeToText() {
-        String textColor = isDarkMode ? "white" : "black";
+        String textColor = isDarkMode ? "white" : "blue";
 
         moneyText.setFill(Color.web(textColor));
         healthText.setFill(Color.web(textColor));
