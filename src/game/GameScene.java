@@ -14,9 +14,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +29,11 @@ public class GameScene {
     private Timeline gameLoop;
     private MediaPlayer mediaPlayer;
     private final Image towerSpotImage = new Image("/assets/images/towers/Tower_Purple.png");
+    private ImageView backgroundImageView;
+    private Stage stage;
 
-    public GameScene() {
+    public GameScene(Stage stage) {
+        this.stage = stage;
         gamePane = new Pane();
         towerTypeComboBox = new ComboBox<>();
         towerSpots = new ArrayList<>();
@@ -41,10 +43,11 @@ public class GameScene {
         setupComboBox();
         setupBackground();
         setupTowerSpots();
+        setupGameLoop();
 
         gameController = new GameController(gamePane);
 
-        setupGameLoop();
+        makeSceneResponsive();
     }
 
     private void setupGameLoop() {
@@ -82,7 +85,7 @@ public class GameScene {
     private void setupBackground() {
         Image backgroundImage = new Image("/assets/images/background/background.png");
 
-        ImageView backgroundImageView = new ImageView(backgroundImage);
+        backgroundImageView = new ImageView(backgroundImage);
 
         backgroundImageView.setFitWidth(1300);
         backgroundImageView.setFitHeight(1000);
@@ -101,16 +104,18 @@ public class GameScene {
         ImageView spotImageView = new ImageView(towerSpotImage);
         spotImageView.setFitWidth(150);
         spotImageView.setFitHeight(150);
-        spotImageView.setX(x - 75);
-        spotImageView.setY(y - 75);
+
+        // Les positions relatives seront ajustées selon la taille de la fenêtre.
+        spotImageView.layoutXProperty().bind(stage.widthProperty().multiply(x).subtract(75));
+        spotImageView.layoutYProperty().bind(stage.heightProperty().multiply(y).subtract(75));
 
         spotImageView.setOnMouseClicked(event -> {
-            if (gameController.isGameOver()){
+            if (gameController.isGameOver()) {
                 return;
             }
 
             String currentSelectedTowerType = towerTypeComboBox.getValue();
-            addTower(x, y, currentSelectedTowerType);
+            addTower(spotImageView.getLayoutX() + 75, spotImageView.getLayoutY() + 75, currentSelectedTowerType);
         });
 
         gamePane.getChildren().add(spotImageView);
@@ -150,5 +155,11 @@ public class GameScene {
         }
 
         System.out.println(towerType + " placé à : " + x + ", " + y);
+    }
+
+    private void makeSceneResponsive() {
+        // Ajuster la taille de l'arrière-plan selon la taille de la fenêtre.
+        backgroundImageView.fitWidthProperty().bind(stage.widthProperty());
+        backgroundImageView.fitHeightProperty().bind(stage.heightProperty());
     }
 }

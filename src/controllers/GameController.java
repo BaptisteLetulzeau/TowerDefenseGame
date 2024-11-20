@@ -182,6 +182,7 @@ public class GameController {
         }
 
         activeEnemies = new ArrayList<>(waves.get(currentWaveIndex));
+        spawnEnemies(activeEnemies);
 
         currentWaveIndex++;
 

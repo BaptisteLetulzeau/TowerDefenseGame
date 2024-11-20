@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
-        GameScene gameScene = new GameScene();
+        GameScene gameScene = new GameScene(primaryStage);
 
         Scene mainScene = new Scene(gameScene.getRootLayout(), 1300, 1000);
 
