@@ -69,7 +69,7 @@ public class GameScene {
 
     public void showSettingsMenu() {
         Scene mainScene = rootLayout.getScene();
-        SettingsMenu settingsMenu = new SettingsMenu(mainScene, mediaPlayer);
+        SettingsMenu settingsMenu = new SettingsMenu(mainScene, mediaPlayer, gameController);
         settingsMenu.display();
     }
 

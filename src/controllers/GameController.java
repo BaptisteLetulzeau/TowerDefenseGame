@@ -42,6 +42,7 @@ public class GameController {
     private Text moneyText;
     private int money = 50;
     private boolean isGameOver = false;
+    private boolean isDarkMode = false;
 
     public GameController(Pane gamePane) {
         this.gamePane = gamePane;
@@ -56,6 +57,18 @@ public class GameController {
         setupMoney();
 
         startWave();
+    }
+
+    public void toggleTheme(boolean darkModeEnabled) {
+        isDarkMode = darkModeEnabled;
+        applyThemeToText();
+    }
+
+    private void applyThemeToText() {
+        String textColor = isDarkMode ? "white" : "black";
+
+        moneyText.setFill(Color.web(textColor));
+        healthText.setFill(Color.web(textColor));
     }
 
     public boolean canPurchase(String towerType) {

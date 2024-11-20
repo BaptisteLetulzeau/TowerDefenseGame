@@ -1,5 +1,6 @@
 package game;
 
+import controllers.GameController;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -17,14 +18,12 @@ public class SettingsMenu {
     private double currentVolume = 50;
     private Scene mainScene;
     private MediaPlayer mediaPlayer;
-    private final CheckBox darkModeCheckBox;
     private boolean isDarkMode = false;
 
-    public SettingsMenu(Scene mainScene, MediaPlayer mediaPlayer) {
+    public SettingsMenu(Scene mainScene, MediaPlayer mediaPlayer, GameController gamecontroller) {
         this.mainScene = mainScene;
         this.mediaPlayer = mediaPlayer;
         settingsLayout = new VBox(10);
-        this.darkModeCheckBox = new CheckBox("Change colors");
 
         Label brightnessLabel = new Label("Brightness :");
         Slider brightnessSlider = new Slider(0, 1, currentBrightness);
@@ -67,27 +66,17 @@ public class SettingsMenu {
             fullScreenButton.setText(!primaryStage.isFullScreen() ? "Full Screen" : "Exit Full Screen");
         });
 
-        darkModeCheckBox.setOnAction(event -> {
-            isDarkMode = darkModeCheckBox.isSelected();
-            toggleTheme(isDarkMode);
+        Button toggleThemeButton = new Button("Toggle Theme");
+        toggleThemeButton.setOnAction(event -> {
+            isDarkMode = !isDarkMode;
+            gamecontroller.toggleTheme(isDarkMode);
         });
 
         settingsLayout.getStyleClass().add("settings-layout");
         pauseMusicButton.getStyleClass().add("button");
         playMusicButton.getStyleClass().add("button");
 
-        settingsLayout.getChildren().addAll(brightnessLabel, brightnessSlider, volumeLabel, volumeSlider, pauseMusicButton, playMusicButton, fullScreenButton, darkModeCheckBox);
-    }
-
-    private void toggleTheme(boolean darkModeEnabled) {
-        mainScene.getStylesheets().clear();
-
-        if (darkModeEnabled) {
-            mainScene.getStylesheets().add(getClass().getResource("/assets/style/dark-theme.css").toExternalForm());
-        }
-        else {
-            mainScene.getStylesheets().add(getClass().getResource("/assets/style/light-theme.css").toExternalForm());
-        }
+        settingsLayout.getChildren().addAll(brightnessLabel, brightnessSlider, volumeLabel, volumeSlider, pauseMusicButton, playMusicButton, fullScreenButton, toggleThemeButton);
     }
 
     private void adjustBrightness(double value) {
@@ -112,7 +101,8 @@ public class SettingsMenu {
         Scene settingsScene = new Scene(settingsLayout, 400, 300);
         if (isDarkMode) {
             settingsScene.getStylesheets().add(getClass().getResource("/assets/style/dark-theme.css").toExternalForm());
-        } else {
+        }
+        else {
             settingsScene.getStylesheets().add(getClass().getResource("/assets/style/light-theme.css").toExternalForm());
         }
 
