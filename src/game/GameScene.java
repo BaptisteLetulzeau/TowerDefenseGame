@@ -105,6 +105,10 @@ public class GameScene {
         spotImageView.setY(y - 75);
 
         spotImageView.setOnMouseClicked(event -> {
+            if (gameController.isGameOver()){
+                return;
+            }
+
             String currentSelectedTowerType = towerTypeComboBox.getValue();
             addTower(x, y, currentSelectedTowerType);
         });

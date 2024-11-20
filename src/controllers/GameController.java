@@ -41,6 +41,7 @@ public class GameController {
     private Text healthText;
     private Text moneyText;
     private int money = 50;
+    private boolean isGameOver = false;
 
     public GameController(Pane gamePane) {
         this.gamePane = gamePane;
@@ -215,7 +216,9 @@ public class GameController {
 
         while (iterator.hasNext()) {
             Enemies enemy = iterator.next();
-            enemy.update();
+            if (!isGameOver){
+                enemy.update();
+            }
 
             if (enemy.hasReachedFinalWaypoint() && playerLives >= 0) {
                 playerLives--;
@@ -231,6 +234,7 @@ public class GameController {
                 }
 
                 if (playerLives <= 0) {
+                    isGameOver = true;
                     showGameOver();
                     return;
                 }
@@ -263,6 +267,10 @@ public class GameController {
         gameOverText.setVisible(true);
         gameOverText.setX((gamePane.getWidth() - gameOverText.getBoundsInLocal().getWidth()) / 2);
         gameOverText.setY((gamePane.getHeight() - gameOverText.getBoundsInLocal().getHeight()) / 2);
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
     }
 
     private void showGameWon() {

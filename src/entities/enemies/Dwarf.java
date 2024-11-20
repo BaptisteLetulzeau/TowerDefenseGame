@@ -15,7 +15,6 @@ public class Dwarf extends Enemies {
     private static final int COLUMNS = 10;
     private static final int FRAMES_IN_SECOND_LINE = 6;
     private int currentFrame = 0;
-    private Timeline animation;
     private List<Point2D> waypoints;
     private double speed = 5.5;
     private Image spriteSheet;

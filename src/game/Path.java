@@ -19,8 +19,8 @@ public class Path {
         waypoints.add(new Point2D(130, 140));
         waypoints.add(new Point2D(400, 140));
         waypoints.add(new Point2D(400, 550));
-        waypoints.add(new Point2D(800, 550));
-        waypoints.add(new Point2D(800, 350));
+        waypoints.add(new Point2D(750, 550));
+        waypoints.add(new Point2D(750, 350));
         waypoints.add(new Point2D(1100, 350));
     }
 
