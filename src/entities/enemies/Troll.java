@@ -1,9 +1,9 @@
 package entities.enemies;
 
-import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import java.util.List;
 
 public class Troll extends Enemies {
@@ -17,13 +17,15 @@ public class Troll extends Enemies {
     private List<Point2D> waypoints;
     private double speed = 3.5;
     private Image spriteSheet;
-    private double startX;
-    private double startY;
     private int currentWaypointIndex = 0;
+    private double startXPercent;
+    private double startYPercent;
+    private Pane gamePane;
 
-    public Troll(List<Point2D> waypoints, double startX, double startY) {
+    public Troll(List<Point2D> waypoints, double startXPourcent, double startYPourcent, Pane gamePane) {
         super("assets/images/enemies/Troll.png", waypoints, 160);
         this.waypoints = waypoints;
+        this.gamePane = gamePane;
         this.spriteSheet = new Image(getClass().getResource("/assets/images/enemies/Troll.png").toExternalForm());
 
         setImage(this.spriteSheet);
@@ -31,8 +33,20 @@ public class Troll extends Enemies {
         setFitHeight(FRAME_HEIGHT);
         setViewport(new Rectangle2D(0, FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT));
 
-        this.startX = startX;
-        this.startY = startY;
+        double startX = gamePane.getWidth() * startXPourcent;
+        double startY = gamePane.getHeight() * startYPourcent;
+        this.startXPercent = startXPourcent;
+        this.startYPercent = startYPourcent;
+        setLayoutX(startX);
+        setLayoutY(startY);
+
+        gamePane.widthProperty().addListener((obs, oldVal, newVal) -> updatePosition());
+        gamePane.heightProperty().addListener((obs, oldVal, newVal) -> updatePosition());
+    }
+
+    private void updatePosition() {
+        double startX = gamePane.getWidth() * startXPercent;
+        double startY = gamePane.getHeight() * startYPercent;
         setLayoutX(startX);
         setLayoutY(startY);
     }
@@ -42,9 +56,9 @@ public class Troll extends Enemies {
             return;
         }
 
-        Point2D currentWaypoint = waypoints.get(currentWaypointIndex);
-        double targetX = currentWaypoint.getX();
-        double targetY = currentWaypoint.getY();
+        Point2D waypointPercent = waypoints.get(currentWaypointIndex);
+        double targetX = waypointPercent.getX() * getParent().getLayoutBounds().getWidth();
+        double targetY = waypointPercent.getY() * getParent().getLayoutBounds().getHeight();
 
         double deltaX = targetX - getLayoutX();
         double deltaY = targetY - getLayoutY();
@@ -55,16 +69,14 @@ public class Troll extends Enemies {
             if (currentWaypointIndex >= waypoints.size()) {
                 return;
             }
-            currentWaypoint = waypoints.get(currentWaypointIndex);
-            targetX = currentWaypoint.getX();
-            targetY = currentWaypoint.getY();
         }
+        else {
+            double directionX = deltaX / distance;
+            double directionY = deltaY / distance;
 
-        double directionX = deltaX / distance;
-        double directionY = deltaY / distance;
-
-        setLayoutX(getLayoutX() + directionX * speed);
-        setLayoutY(getLayoutY() + directionY * speed);
+            setLayoutX(getLayoutX() + directionX * speed);
+            setLayoutY(getLayoutY() + directionY * speed);
+        }
     }
 
     @Override

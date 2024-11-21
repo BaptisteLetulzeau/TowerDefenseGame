@@ -43,6 +43,7 @@ public class GameController {
     private int money = 50;
     private boolean isGameOver = false;
     private boolean isDarkMode = false;
+    public boolean hasWon = false;
 
     public GameController(Pane gamePane) {
         this.gamePane = gamePane;
@@ -171,10 +172,33 @@ public class GameController {
     private List<List<Enemies>> createWaves() {
         List<List<Enemies>> waves = new ArrayList<>();
 
-        List<Enemies> wave1 = new ArrayList<>(List.of(new Gnom(path.getWaypoints(), -149, 420), new Troll(path.getWaypoints(), -149, 420)));
-        List<Enemies> wave2 = new ArrayList<>(List.of(new Dwarf(path.getWaypoints(), -149, 420), new Gnom(path.getWaypoints(), -149, 420), new Troll(path.getWaypoints(), -149, 420)));
-        List<Enemies> wave3 = new ArrayList<>(List.of(new Dwarf(path.getWaypoints(), -149, 420), new Gnom(path.getWaypoints(), -149, 420), new Troll(path.getWaypoints(), -149, 420), new Dwarf(path.getWaypoints(), -149, 420)));
-        List<Enemies> wave4 = new ArrayList<>(List.of(new Dwarf(path.getWaypoints(), -149, 420), new Gnom(path.getWaypoints(), -149, 420), new Dwarf(path.getWaypoints(), -149, 420), new Troll(path.getWaypoints(), -149, 420), new Dwarf(path.getWaypoints(), -149, 420), new Gnom(path.getWaypoints(), -149, 420), new Troll(path.getWaypoints(), -149, 420)));
+        List<Enemies> wave1 = new ArrayList<>(List.of(
+                new Gnom(path.getWaypoints(), -0.1, 0.45, gamePane),
+                new Troll(path.getWaypoints(), -0.1, 0.45, gamePane)
+        ));
+
+        List<Enemies> wave2 = new ArrayList<>(List.of(
+                new Dwarf(path.getWaypoints(), -0.1, 0.45, gamePane),
+                new Gnom(path.getWaypoints(), -0.1, 0.45, gamePane),
+                new Troll(path.getWaypoints(), -0.1, 0.45, gamePane)
+        ));
+
+        List<Enemies> wave3 = new ArrayList<>(List.of(
+                new Dwarf(path.getWaypoints(), -0.1, 0.45, gamePane),
+                new Gnom(path.getWaypoints(), -0.1, 0.45, gamePane),
+                new Troll(path.getWaypoints(), -0.1, 0.45, gamePane),
+                new Dwarf(path.getWaypoints(), -0.1, 0.45, gamePane)
+        ));
+
+        List<Enemies> wave4 = new ArrayList<>(List.of(
+                new Dwarf(path.getWaypoints(), -0.1, 0.45, gamePane),
+                new Gnom(path.getWaypoints(), -0.1, 0.45, gamePane),
+                new Dwarf(path.getWaypoints(), -0.1, 0.45, gamePane),
+                new Troll(path.getWaypoints(), -0.1, 0.45, gamePane),
+                new Dwarf(path.getWaypoints(), -0.1, 0.45, gamePane),
+                new Gnom(path.getWaypoints(), -0.1, 0.45, gamePane),
+                new Troll(path.getWaypoints(), -0.1, 0.45, gamePane)
+        ));
 
         waves.add(wave1);
         waves.add(wave2);
@@ -205,17 +229,11 @@ public class GameController {
     }
 
     private void spawnEnemies(List<Enemies> currentWave) {
-        Random random = new Random();
-        double spawnRadius = 50;
-
         if (!currentWave.isEmpty()) {
             Enemies enemy = currentWave.removeFirst();
 
-            double randomOffsetX = (random.nextDouble() - 0.5) * 2 * spawnRadius;
-            double randomOffsetY = (random.nextDouble() - 0.5) * 2 * spawnRadius;
-
-            double startX = enemy.getLayoutX() + randomOffsetX;
-            double startY = enemy.getLayoutY() + randomOffsetY;
+            double startX = enemy.getLayoutX();
+            double startY = enemy.getLayoutY();
 
             enemy.setLayoutX(startX);
             enemy.setLayoutY(startY);
@@ -268,6 +286,7 @@ public class GameController {
             startWave();
         }
         else if (currentWaveIndex == waves.size() && activeEnemies.isEmpty()) {
+            hasWon = true;
             showGameWon();
             waveTimeline.stop();
         }

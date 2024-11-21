@@ -32,16 +32,20 @@ public abstract class Towers extends ImageView implements Observer  {
     
     public void startShootingArrow(GameController gameController) {
         shootingTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
-//            for (Enemies enemy : gameController.getActiveEnemies()) {
-//                if (isEnemyInRange(enemy)) {
-//                    attackEnemyInRange(enemy);
-//                    break;
-//                }
-//            }
-            Enemies weakestEnemy = findWeakestEnemyInRange(gameController);
-            System.out.println(weakestEnemy);
-            if (weakestEnemy != null) {
-                attackEnemyInRange(weakestEnemy);
+            if (!gameController.hasWon) {
+                Enemies weakestEnemy = findWeakestEnemyInRange(gameController);
+                System.out.println(weakestEnemy);
+                if (weakestEnemy != null) {
+                    attackEnemyInRange(weakestEnemy);
+                }
+            }
+            else {
+                for (Enemies enemy : gameController.getActiveEnemies()) {
+                   if (isEnemyInRange(enemy)) {
+                        attackEnemyInRange(enemy);
+                        break;
+                   }
+                }
             }
         }));
         shootingTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -50,16 +54,20 @@ public abstract class Towers extends ImageView implements Observer  {
 
     public void startShootingKnight(GameController gameController) {
         shootingTimeline = new Timeline(new KeyFrame(Duration.seconds(2), e -> {
-//            for (Enemies enemy : gameController.getActiveEnemies()) {
-//                if (isEnemyInRange(enemy)) {
-//                    attackEnemyInRange(enemy);
-//                    break;
-//                }
-//            }
-            Enemies strongestEnemy = findStrongestEnemyInRange(gameController);
-            System.out.println(strongestEnemy);
-            if (strongestEnemy != null) {
-                attackEnemyInRange(strongestEnemy);
+            if (!gameController.hasWon) {
+                Enemies strongestEnemy = findStrongestEnemyInRange(gameController);
+                System.out.println(strongestEnemy);
+                if (strongestEnemy != null) {
+                    attackEnemyInRange(strongestEnemy);
+                }
+            }
+            else {
+                for (Enemies enemy : gameController.getActiveEnemies()) {
+                    if (isEnemyInRange(enemy)) {
+                        attackEnemyInRange(enemy);
+                        break;
+                    }
+                }
             }
         }));
         shootingTimeline.setCycleCount(Timeline.INDEFINITE);
