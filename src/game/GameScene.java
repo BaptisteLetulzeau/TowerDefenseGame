@@ -94,10 +94,10 @@ public class GameScene {
     }
 
     private void setupTowerSpots() {
-        addTowerSpot(110, 350, "ArrowTower");
-        addTowerSpot(330, 670, "ArrowTower");
-        addTowerSpot(700, 520, "ArrowTower");
-        addTowerSpot(1200, 300, "ArrowTower");
+        addTowerSpot(0.08, 0.35, "ArrowTower");
+        addTowerSpot(0.27, 0.7, "ArrowTower");
+        addTowerSpot(0.5, 0.52, "ArrowTower");
+        addTowerSpot(0.85, 0.35, "ArrowTower");
     }
 
     private void addTowerSpot(double x, double y, String defaultTowerType) {
@@ -105,9 +105,8 @@ public class GameScene {
         spotImageView.setFitWidth(150);
         spotImageView.setFitHeight(150);
 
-        // Les positions relatives seront ajustées selon la taille de la fenêtre.
-        spotImageView.layoutXProperty().bind(stage.widthProperty().multiply(x).subtract(75));
-        spotImageView.layoutYProperty().bind(stage.heightProperty().multiply(y).subtract(75));
+        spotImageView.layoutXProperty().bind(gamePane.widthProperty().multiply(x).subtract(75));
+        spotImageView.layoutYProperty().bind(gamePane.heightProperty().multiply(y).subtract(75));
 
         spotImageView.setOnMouseClicked(event -> {
             if (gameController.isGameOver()) {
