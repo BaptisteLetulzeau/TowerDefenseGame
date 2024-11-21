@@ -232,14 +232,16 @@ public class GameController {
         if (!currentWave.isEmpty()) {
             Enemies enemy = currentWave.removeFirst();
 
-            double startX = enemy.getLayoutX();
-            double startY = enemy.getLayoutY();
+            if(!gamePane.getChildren().contains(enemy)){
+                double startX = enemy.getLayoutX();
+                double startY = enemy.getLayoutY();
 
-            enemy.setLayoutX(startX);
-            enemy.setLayoutY(startY);
+                enemy.setLayoutX(startX);
+                enemy.setLayoutY(startY);
 
-            activeEnemies.add(enemy);
-            gamePane.getChildren().add(enemy);
+                activeEnemies.add(enemy);
+                gamePane.getChildren().add(enemy);
+            }
         }
     }
 
