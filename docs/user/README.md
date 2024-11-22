@@ -3,12 +3,8 @@
 **Table des Matières**
 
     - Description
-    - Caractéristiques
-    - Design Pattern
     - Installation
     - Instructions de Jeu
-    - Technologies utilisées
-    - Licence
 
 **Description**
 
