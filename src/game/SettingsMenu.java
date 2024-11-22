@@ -1,6 +1,7 @@
 package game;
 
 import controllers.GameController;
+import entities.enemies.Enemies;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -62,8 +63,15 @@ public class SettingsMenu {
         Button fullScreenButton = new Button("Full Screen");
         fullScreenButton.setOnAction(e -> {
             Stage primaryStage = (Stage) mainScene.getWindow();
-            primaryStage.setFullScreen(!primaryStage.isFullScreen());
-            fullScreenButton.setText(!primaryStage.isFullScreen() ? "Full Screen" : "Exit Full Screen");
+            boolean isFullScreen = !primaryStage.isFullScreen();
+            primaryStage.setFullScreen(isFullScreen);
+            fullScreenButton.setText(isFullScreen ? "Exit Full Screen" : "Full Screen");
+
+            if (gamecontroller != null) {
+                for (Enemies enemy : gamecontroller.getActiveEnemies()) {
+                    enemy.restoreSavedPosition(enemy);
+                }
+            }
         });
 
         Button toggleThemeButton = new Button("Toggle Theme");

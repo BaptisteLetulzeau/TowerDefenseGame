@@ -68,6 +68,8 @@ public class GameScene {
     }
 
     public void showSettingsMenu() {
+        gameController.saveEnemyPositions();
+
         Scene mainScene = rootLayout.getScene();
         SettingsMenu settingsMenu = new SettingsMenu(mainScene, mediaPlayer, gameController);
         settingsMenu.display();

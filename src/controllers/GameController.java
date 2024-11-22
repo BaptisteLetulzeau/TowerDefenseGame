@@ -88,6 +88,10 @@ public class GameController {
         }
     }
 
+    public int getMoney() {
+        return money;
+    }
+
     public void deductMoney(int money) {
         this.money -= money;
         updateMoney();
@@ -169,7 +173,7 @@ public class GameController {
         timeline.play();
     }
 
-    private List<List<Enemies>> createWaves() {
+    public List<List<Enemies>> createWaves() {
         List<List<Enemies>> waves = new ArrayList<>();
 
         List<Enemies> wave1 = new ArrayList<>(List.of(
@@ -219,11 +223,10 @@ public class GameController {
         }
 
         activeEnemies = new ArrayList<>(waves.get(currentWaveIndex));
-        spawnEnemies(activeEnemies);
 
         currentWaveIndex++;
 
-        waveTimeline = new Timeline(new KeyFrame(Duration.seconds(2), e -> spawnEnemies(activeEnemies)));
+        waveTimeline = new Timeline(new KeyFrame(Duration.seconds(1), e -> spawnEnemies(activeEnemies)));
         waveTimeline.setCycleCount(activeEnemies.size());
         waveTimeline.play();
     }
@@ -241,6 +244,22 @@ public class GameController {
 
                 activeEnemies.add(enemy);
                 gamePane.getChildren().add(enemy);
+            }
+        }
+    }
+
+    public void saveEnemyPositions() {
+        for (Enemies enemy : activeEnemies) {
+            if (!enemy.isDead()) {
+                enemy.saveCurrentPosition();
+            }
+        }
+    }
+
+    public void restoreEnemyPositions() {
+        for (Enemies enemy : activeEnemies) {
+            if (!enemy.isDead()) {
+                enemy.restoreSavedPosition(enemy);
             }
         }
     }
@@ -274,7 +293,7 @@ public class GameController {
                 }
             }
 
-            if (enemy.isDefeated()) {
+            if (enemy.isDead()) {
                 iterator.remove();
                 gamePane.getChildren().remove(enemy);
 

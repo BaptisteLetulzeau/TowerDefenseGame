@@ -67,7 +67,7 @@ public class Gnom extends Enemies {
         if (distance < speed) {
             currentWaypointIndex++;
             if (currentWaypointIndex >= waypoints.size()) {
-                return;
+                currentWaypointIndex = 0;
             }
         }
         else {

@@ -51,7 +51,11 @@ public class Dwarf extends Enemies {
         setLayoutY(startY);
     }
 
-    private void move() {
+    public Point2D getPosition() {
+        return waypoints.get(currentFrame);
+    }
+
+    public void move() {
         if (hasReachedFinalWaypoint()) {
             return;
         }

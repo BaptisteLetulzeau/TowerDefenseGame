@@ -2,11 +2,9 @@ package entities.enemies;
 
 import entities.towers.Observer;
 import entities.towers.Subject;
-import entities.towers.Towers;
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +12,8 @@ public abstract class Enemies extends ImageView implements Subject {
     private final List<Observer> observers = new ArrayList<>();
     protected List<Point2D> waypoints;
     private int health;
+    private double coordX;
+    private double coordY;
 
     public Enemies(String imagePath, List<Point2D> waypoints, int health) {
         this.waypoints = waypoints;
@@ -63,8 +63,14 @@ public abstract class Enemies extends ImageView implements Subject {
         return health;
     }
 
-    public boolean isDefeated() {
-        return this.health <= 0;
+    public void saveCurrentPosition() {
+        this.coordX = this.getLayoutX();
+        this.coordY = this.getLayoutY();
+    }
+
+    public void restoreSavedPosition(Enemies enemy) {
+        enemy.setLayoutX(this.coordX);
+        enemy.setLayoutY(this.coordY);
     }
 
     public abstract boolean hasReachedFinalWaypoint();

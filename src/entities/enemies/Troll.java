@@ -45,14 +45,20 @@ public class Troll extends Enemies {
     }
 
     private void updatePosition() {
-        double startX = gamePane.getWidth() * startXPercent;
-        double startY = gamePane.getHeight() * startYPercent;
-        setLayoutX(startX);
-        setLayoutY(startY);
+        if (!hasReachedFinalWaypoint()) {
+            double startX = gamePane.getWidth() * startXPercent;
+            double startY = gamePane.getHeight() * startYPercent;
+            setLayoutX(startX);
+            setLayoutY(startY);
+        }
     }
 
     private void move() {
         if (hasReachedFinalWaypoint()) {
+            return;
+        }
+
+        if (getParent() == null) {
             return;
         }
 
@@ -67,7 +73,7 @@ public class Troll extends Enemies {
         if (distance < speed) {
             currentWaypointIndex++;
             if (currentWaypointIndex >= waypoints.size()) {
-                return;
+                currentWaypointIndex = 0;
             }
         }
         else {

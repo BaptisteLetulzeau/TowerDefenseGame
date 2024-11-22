@@ -15,8 +15,8 @@ public class Path {
 
     private void setupPath() {
         waypoints.add(new Point2D(0, 0.45));
-        waypoints.add(new Point2D(0.1, 0.42));
-        waypoints.add(new Point2D(0.1, 0.14));
+        waypoints.add(new Point2D(0.12, 0.42));
+        waypoints.add(new Point2D(0.12, 0.14));
         waypoints.add(new Point2D(0.3, 0.14));
         waypoints.add(new Point2D(0.3, 0.60));
         waypoints.add(new Point2D(0.57, 0.60));
