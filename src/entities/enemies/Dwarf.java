@@ -1,10 +1,9 @@
 package entities.enemies;
 
-import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Pane;
 import java.util.List;
 
 public class Dwarf extends Enemies {
@@ -15,21 +14,41 @@ public class Dwarf extends Enemies {
     private static final int COLUMNS = 10;
     private static final int FRAMES_IN_SECOND_LINE = 6;
     private int currentFrame = 0;
-    private Timeline animation;
     private List<Point2D> waypoints;
-    private double speed = 2.5;
+    private double speed = 5.5;
     private Image spriteSheet;
-    private static final int centerY = 360;
+    private int currentWaypointIndex = 0;
+    private double startXPercent;
+    private double startYPercent;
+    private Pane gamePane;
 
-    public Dwarf(List<Point2D> waypoints) {
-        super("assets/images/enemies/Dwarf.png", waypoints);
+    public Dwarf(List<Point2D> waypoints, double startXPourcent, double startYPourcent, Pane gamePane) {
+        super("assets/images/enemies/Dwarf.png", waypoints, 80);
         this.waypoints = waypoints;
+        this.gamePane = gamePane;
         this.spriteSheet = new Image(getClass().getResource("/assets/images/enemies/Dwarf.png").toExternalForm());
 
         setImage(this.spriteSheet);
         setFitWidth(FRAME_WIDTH);
         setFitHeight(FRAME_HEIGHT);
         setViewport(new Rectangle2D(0, FRAME_HEIGHT, FRAME_WIDTH, FRAME_HEIGHT));
+
+        double startX = gamePane.getWidth() * startXPourcent;
+        double startY = gamePane.getHeight() * startYPourcent;
+        this.startXPercent = startXPourcent;
+        this.startYPercent = startYPourcent;
+        setLayoutX(startX);
+        setLayoutY(startY);
+
+        gamePane.widthProperty().addListener((obs, oldVal, newVal) -> updatePosition());
+        gamePane.heightProperty().addListener((obs, oldVal, newVal) -> updatePosition());
+    }
+
+    private void updatePosition() {
+        double startX = gamePane.getWidth() * startXPercent;
+        double startY = gamePane.getHeight() * startYPercent;
+        setLayoutX(startX);
+        setLayoutY(startY);
     }
 
     private void move() {
@@ -37,12 +56,27 @@ public class Dwarf extends Enemies {
             return;
         }
 
-        double newX = getLayoutX() + speed;
-        setLayoutX(newX);
-        setLayoutY(centerY);
+        Point2D waypointPercent = waypoints.get(currentWaypointIndex);
+        double targetX = waypointPercent.getX() * getParent().getLayoutBounds().getWidth();
+        double targetY = waypointPercent.getY() * getParent().getLayoutBounds().getHeight();
 
-        notifyObservers();
-        //System.out.println(getLayoutX());
+        double deltaX = targetX - getLayoutX();
+        double deltaY = targetY - getLayoutY();
+        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+        if (distance < speed) {
+            currentWaypointIndex++;
+            if (currentWaypointIndex >= waypoints.size()) {
+                return;
+            }
+        }
+        else {
+            double directionX = deltaX / distance;
+            double directionY = deltaY / distance;
+
+            setLayoutX(getLayoutX() + directionX * speed);
+            setLayoutY(getLayoutY() + directionY * speed);
+        }
     }
 
     @Override
@@ -52,8 +86,7 @@ public class Dwarf extends Enemies {
     }
 
     public boolean hasReachedFinalWaypoint() {
-        double finalWaypointX = waypoints.getLast().getX();
-        return getLayoutX() >= finalWaypointX;
+        return currentWaypointIndex >= waypoints.size();
     }
 
     private void updateFrame() {
