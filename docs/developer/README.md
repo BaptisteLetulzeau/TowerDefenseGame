@@ -28,6 +28,7 @@
         Java Development Kit (JDK) : version 23 ou supérieure.
 
     Install it: https://openjfx.io/openjfx-docs/#install-java
+    Install IDE: https://www.jetbrains.com/fr-fr/idea/download/?section=windows
 
 **Technologies utilisées**
 
