@@ -45,10 +45,12 @@ public class Gnom extends Enemies {
     }
 
     private void updatePosition() {
-        double startX = gamePane.getWidth() * startXPercent;
-        double startY = gamePane.getHeight() * startYPercent;
-        setLayoutX(startX);
-        setLayoutY(startY);
+        if (!hasReachedFinalWaypoint()) {
+            double startX = gamePane.getWidth() * startXPercent;
+            double startY = gamePane.getHeight() * startYPercent;
+            setLayoutX(startX);
+            setLayoutY(startY);
+        }
     }
 
     private void move() {
@@ -86,7 +88,8 @@ public class Gnom extends Enemies {
     }
 
     public boolean hasReachedFinalWaypoint() {
-        return currentWaypointIndex >= waypoints.size();
+        //return currentWaypointIndex >= waypoints.size();
+        return this.getLayoutX() >= 1100;
     }
 
     private void updateFrame() {

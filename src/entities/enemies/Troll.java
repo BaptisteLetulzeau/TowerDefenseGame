@@ -92,7 +92,8 @@ public class Troll extends Enemies {
     }
 
     public boolean hasReachedFinalWaypoint() {
-        return currentWaypointIndex >= waypoints.size();
+        //return currentWaypointIndex >= waypoints.size();
+        return this.getLayoutX() >= 1100;
     }
 
     private void updateFrame() {

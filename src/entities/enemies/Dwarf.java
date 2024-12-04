@@ -15,7 +15,7 @@ public class Dwarf extends Enemies {
     private static final int FRAMES_IN_SECOND_LINE = 6;
     private int currentFrame = 0;
     private List<Point2D> waypoints;
-    private double speed = 5.5;
+    private double speed = 5;
     private Image spriteSheet;
     private int currentWaypointIndex = 0;
     private double startXPercent;
@@ -45,10 +45,12 @@ public class Dwarf extends Enemies {
     }
 
     private void updatePosition() {
-        double startX = gamePane.getWidth() * startXPercent;
-        double startY = gamePane.getHeight() * startYPercent;
-        setLayoutX(startX);
-        setLayoutY(startY);
+        if (!hasReachedFinalWaypoint()) {
+            double startX = gamePane.getWidth() * startXPercent;
+            double startY = gamePane.getHeight() * startYPercent;
+            setLayoutX(startX);
+            setLayoutY(startY);
+        }
     }
 
     public Point2D getPosition() {
@@ -90,7 +92,8 @@ public class Dwarf extends Enemies {
     }
 
     public boolean hasReachedFinalWaypoint() {
-        return currentWaypointIndex >= waypoints.size();
+        //return currentWaypointIndex >= waypoints.size();
+        return this.getLayoutX() >= 1100;
     }
 
     private void updateFrame() {
